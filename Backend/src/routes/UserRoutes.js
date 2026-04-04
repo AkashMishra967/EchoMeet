@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addToHistory, getUserHistory, login, register } from "../controllers/UserController.js";
+import { addToHistory, getUserHistory, login, register } from "../controller/UserController.js";
 
 
 
