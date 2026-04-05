@@ -452,11 +452,10 @@ export default function VideoMeetComponent() {
             {askForUsername === true ?
 
                 <div>
-
-
                     <h2>Enter into Lobby </h2>
+                    <br></br>
                     <TextField id="outlined-basic" label="Username" value={username} onChange={e => setUsername(e.target.value)} variant="outlined" />
-                    <Button variant="contained" onClick={connect}>Connect</Button>
+                    <Button  style={{position:'relative', left:'20px', top:"8px"}}variant="contained" onClick={connect}>Connect</Button>
 
 
                     <div>
@@ -490,8 +489,8 @@ export default function VideoMeetComponent() {
                             </div>
 
                             <div className={styles.chattingArea}>
-                                <TextField value={message} onChange={(e) => setMessage(e.target.value)} id="outlined-basic" label="Enter Your chat" variant="outlined" />
-                                <Button variant='contained' onClick={sendMessage}>Send</Button>
+                                <TextField  style={{position:'relative', bottom:"10px", width:"220px"}}value={message} onChange={(e) => setMessage(e.target.value)} id="outlined-basic" label="Enter Your chat" variant="outlined" />
+                                <Button style={{position:'relative',left:'30px'}} variant='contained' onClick={sendMessage}>Send</Button>
                             </div>
 
 
