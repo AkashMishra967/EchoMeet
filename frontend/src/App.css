@@ -1,10 +1,11 @@
 .landingPageContainer {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   background: url("/public/background.png");
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
+  overflow-x: hidden;
 }
 
 .landingPageContainer nav {
@@ -13,7 +14,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  position: relative; /* 🔥 needed for dropdown */
 }
 
 .landingPageContainer nav h2 {
@@ -25,22 +26,48 @@
   display: flex;
   gap: 1.6rem;
   cursor: pointer;
-
 }
 
+/* 🔥 HAMBURGER (NEW) */
+.hamburger {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* 🔥 MOBILE DROPDOWN (NEW) */
+.mobileMenu {
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  background: rgba(0,0,0,0.9);
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+/* MAIN */
 .landingMainContainer {
   display: flex;
   justify-content: space-between;
   padding-inline: 3rem;
-  height: 80vh;
+  min-height: 80vh;
   align-items: center;
 }
 
-.landingMainContainer>div:nth-child(1) {
+.landingMainContainer > div:nth-child(1) {
   font-size: 2.2rem;
 }
 
-.landingMainContainer>div:nth-child(1) div[role='button'] {
+.landingMainContainer h1 {
+  font-size: clamp(28px, 6vw, 70px);
+  line-height: 1.2;
+}
+
+.landingMainContainer > div:nth-child(1) div[role='button'] {
   background: #D97500;
   width: fit-content;
   padding: 1rem;
@@ -48,40 +75,38 @@
   margin-top: 1.9rem;
 }
 
-.landingMainContainer>div:nth-child(1) div[role='button'] a {
+.landingMainContainer > div:nth-child(1) div[role='button'] a {
   text-decoration: none;
   color: white;
   font-size: 1.7rem;
 }
 
-.landingMainContainer>div:nth-child(2) img {
-  height: 70vh;
-  width: auto;
+.landingMainContainer > div:nth-child(2) img {
+  max-width: 100%;
+  height: auto;
 }
 
+/* EXISTING */
 .navBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-inline: 20px;
   text-align: center;
-
 }
+
 .meetContainer {
   display: flex;
   padding-inline: 20px;
-  height: 80vh;
+  min-height: 80vh;
   gap: 10vw;
   justify-content: center;
 }
-
-
 
 .leftPanel {
   height: 100%;
   display: flex;
   align-items: center;
-
 }
 
 .rightPanel {
@@ -91,6 +116,103 @@
 
 .rightPanel > img {
   width: 30vw;
+  max-width: 100%;
   height: auto;
   border-radius: 20px;
+}
+
+/* GLOBAL */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+
+  .landingPageContainer nav {
+    flex-direction: row; /* 🔥 same row */
+  }
+
+  .landingPageContainer nav .navlist {
+    display: none; /* 🔥 hide desktop menu */
+  }
+
+  .hamburger {
+    display: block; /* 🔥 show 3 line button */
+  }
+
+  .landingMainContainer {
+    flex-direction: column;
+    text-align: center;
+    padding-inline: 1rem;
+  }
+
+  .landingMainContainer > div:nth-child(1) {
+    font-size: 1.5rem;
+  }
+
+  .landingMainContainer > div:nth-child(2) img {
+    width: 250px;
+    margin-top: 20px;
+  }
+
+  .meetContainer {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .rightPanel > img {
+    width: 80%;
+  }
+}
+.mobileMenu {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.landingMainContainer > div:nth-child(1) div[role='button'] {
+  transition: 0.3s;
+}
+
+.landingMainContainer > div:nth-child(1) div[role='button']:hover {
+  transform: scale(1.05);
+}
+@media (max-width: 768px) {
+
+  .landingMainContainer {
+    flex-direction: column-reverse; /* 🔥 image upar aa jayegi */
+  }
+
+  /* Text container ko control karo */
+  .landingMainContainer > div:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Button ko niche push karo */
+  .landingMainContainer > div:nth-child(1) div[role='button'] {
+    margin-top: 20px;
+  }
+
+}
+
+
+
+@media (max-width: 768px) {
+
+  .landingMainContainer > div:nth-child(1) {
+    margin-top: -35px; /* 🔥 aur upar */
+  }
+
 }
