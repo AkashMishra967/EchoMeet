@@ -153,3 +153,24 @@
     }
 
 }
+
+/* Chat Header */
+
+.chatHeader {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chatHeader h1 {
+    margin: 0;
+}
+
+.closeChatButton {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+
+    color: black !important;
+}

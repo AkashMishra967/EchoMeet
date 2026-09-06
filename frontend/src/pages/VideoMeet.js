@@ -12,6 +12,7 @@ import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import StopScreenShareIcon from '@mui/icons-material/StopScreenShare'
 import ChatIcon from '@mui/icons-material/Chat'
 import server from '../environment';
+import CloseIcon from '@mui/icons-material/Close';
 
 const server_url = server;
 
@@ -470,9 +471,19 @@ export default function VideoMeetComponent() {
                     {showModal ? <div className={styles.chatRoom}>
 
                         <div className={styles.chatContainer}>
-                            <h1>Chat</h1>
 
-                            <div className={styles.chattingDisplay}>
+    <div className={styles.chatHeader}>
+        <h1>Chat</h1>
+
+        <IconButton
+            onClick={closeChat}
+            className={styles.closeChatButton}
+        >
+            <CloseIcon />
+        </IconButton>
+    </div>
+
+    <div className={styles.chattingDisplay}>
 
                                 {messages.length !== 0 ? messages.map((item, index) => {
 
