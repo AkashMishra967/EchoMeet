@@ -563,3 +563,564 @@
 @media (prefers-reduced-motion: reduce) {
   .lp-window, .lp-chip, .lp-ring, .lp-dot { animation: none; }
 }
+
+
+
+/* ==========================================================
+   PROFESSIONAL POLISH OVERRIDES
+   Keep App.css unchanged. These rules only affect .lp landing UI.
+   ========================================================== */
+
+.lp {
+  --bg: #070b18;
+  --bg-2: #0b1230;
+  --card: rgba(255, 255, 255, 0.055);
+  --border: rgba(190, 202, 255, 0.14);
+  --text: #f7f8ff;
+  --muted: #aeb7d1;
+  --accent: #ffad5c;
+  --accent-2: #ff762e;
+  --blue: #7180ff;
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 78% 10%, rgba(91, 108, 255, 0.20), transparent 34%),
+    radial-gradient(ellipse at 8% 42%, rgba(255, 133, 54, 0.09), transparent 34%),
+    linear-gradient(145deg, #070b18 0%, #0a1026 52%, #0b1230 100%);
+}
+
+/* A fixed, translucent navbar that remains visible while scrolling */
+.lp-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(7, 11, 24, 0.82);
+  border-bottom: 1px solid rgba(190, 202, 255, 0.13);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.lp-nav-inner {
+  max-width: 1240px;
+  min-height: 76px;
+  padding: 0.85rem clamp(1rem, 3.5vw, 2rem);
+}
+
+.lp-logo {
+  gap: 0.75rem;
+  transition: opacity 0.2s ease;
+}
+
+.lp-logo:hover {
+  opacity: 0.9;
+}
+
+.lp-logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #ffb765 0%, #ff762e 100%);
+  box-shadow: 0 8px 24px rgba(255, 118, 46, 0.25);
+}
+
+.lp-logo-text {
+  font-size: 1.28rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.lp-logo-text b {
+  color: #ffad5c;
+  font-weight: 800;
+}
+
+.lp-nav-links {
+  gap: 0.6rem;
+}
+
+.lp-link {
+  padding: 0.65rem 0.95rem;
+  color: #c0c7dc;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font-weight: 600;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.lp-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.065);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.lp-btn {
+  min-height: 43px;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.lp-btn-sm {
+  padding: 0.65rem 1.15rem;
+  font-size: 0.9rem;
+}
+
+.lp-btn-lg {
+  padding: 1rem 1.65rem;
+  font-size: 1rem;
+}
+
+.lp-btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, #ffad5c 0%, #ff762e 100%);
+  box-shadow: 0 10px 26px rgba(255, 118, 46, 0.22);
+}
+
+.lp-btn-primary:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 32px rgba(255, 118, 46, 0.32);
+}
+
+.lp-btn-ghost {
+  color: #f5f6ff;
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(221, 227, 255, 0.2);
+}
+
+.lp-btn-ghost:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(221, 227, 255, 0.32);
+  transform: translateY(-2px);
+}
+
+.lp-burger {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(221, 227, 255, 0.18);
+}
+
+.lp-mobile-menu {
+  position: relative;
+  z-index: 1001;
+  background: rgba(7, 11, 24, 0.98);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.22);
+}
+
+.lp-mobile-menu button {
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.lp-mobile-menu button:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Add space below the fixed navbar without touching App.css */
+.lp-hero {
+  padding-top: 9.25rem;
+  padding-bottom: 5.5rem;
+  gap: clamp(2rem, 4.5vw, 4rem);
+}
+
+.lp-badge {
+  padding: 0.5rem 0.95rem;
+  color: #e6e9ff;
+  background: rgba(113, 128, 255, 0.12);
+  border-color: rgba(139, 151, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.lp-hero h1 {
+  margin-top: 1.45rem;
+  font-size: clamp(2.65rem, 5.1vw, 4.55rem);
+  line-height: 1.075;
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.lp-accent {
+  background: linear-gradient(110deg, #ffd08a 0%, #ff9b4b 45%, #ff762e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.lp-sub {
+  max-width: 510px;
+  margin-top: 1.45rem;
+  color: #b0b8d0;
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  line-height: 1.8;
+}
+
+.lp-cta {
+  gap: 0.85rem;
+  margin-top: 2.15rem;
+}
+
+.lp-checks {
+  gap: 0.7rem 1.35rem;
+  margin-top: 1.9rem;
+}
+
+.lp-checks li {
+  color: #b5bdd4;
+  font-size: 0.88rem;
+}
+
+.lp-checks svg {
+  color: #5de0a4;
+}
+
+/* More refined video-call preview */
+.lp-hero-visual {
+  min-width: 0;
+  padding: 1.5rem 0.75rem;
+}
+
+.lp-glow {
+  inset: 5% 4%;
+  background: radial-gradient(closest-side, rgba(105, 119, 255, 0.36), transparent 72%);
+  filter: blur(48px);
+}
+
+.lp-window {
+  max-width: 550px;
+  border-radius: 22px;
+  background: #0b1230;
+  border: 1px solid rgba(214, 221, 255, 0.16);
+  box-shadow:
+    0 32px 85px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(255, 255, 255, 0.025) inset;
+}
+
+.lp-window-bar {
+  min-height: 45px;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.lp-window-url {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lp-stage {
+  height: 315px;
+  padding: 13px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(77, 92, 210, 0.12), transparent 65%),
+    #05091e;
+}
+
+.lp-tile {
+  border-color: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.lp-tile-main {
+  background:
+    radial-gradient(circle at 28% 24%, rgba(255, 152, 57, 0.22), transparent 52%),
+    linear-gradient(145deg, #1b245c 0%, #11183f 55%, #0c1231 100%);
+}
+
+.lp-tile-thumb {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.lp-avatar-lg {
+  background: linear-gradient(135deg, #ffb765, #ff762e);
+  box-shadow: 0 12px 32px rgba(255, 118, 46, 0.28);
+}
+
+.lp-controls {
+  padding: 0.95rem;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.lp-ctrl {
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.lp-ctrl:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.17);
+}
+
+.lp-ctrl-end {
+  background: #ef4444;
+}
+
+.lp-chip {
+  padding: 0.65rem 1rem;
+  background: rgba(13, 19, 52, 0.9);
+  border-color: rgba(220, 225, 255, 0.17);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.32);
+}
+
+.lp-chip-1 {
+  top: 1%;
+  left: -1%;
+}
+
+.lp-chip-2 {
+  bottom: 3%;
+  right: -1%;
+}
+
+/* Clearer features section */
+.lp-features {
+  padding-top: 3.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.lp-section-head {
+  margin-bottom: 2.5rem;
+}
+
+.lp-section-head h2 {
+  font-size: clamp(1.8rem, 3.4vw, 2.55rem);
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.lp-section-head p {
+  color: #aeb7d1;
+  line-height: 1.75;
+}
+
+.lp-grid {
+  gap: 1.1rem;
+}
+
+.lp-card {
+  position: relative;
+  padding: 1.55rem;
+  border-radius: 19px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
+  border-color: rgba(190, 202, 255, 0.13);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.lp-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 173, 92, 0.42);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.035));
+}
+
+.lp-card-icon {
+  border-radius: 15px;
+  background: linear-gradient(135deg, rgba(255, 173, 92, 0.19), rgba(255, 118, 46, 0.08));
+  border-color: rgba(255, 173, 92, 0.25);
+}
+
+.lp-card h3 {
+  margin-bottom: 0.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.lp-card p {
+  color: #aeb7d1;
+  line-height: 1.75;
+}
+
+/* Final call-to-action */
+.lp-final {
+  margin-top: 0.5rem;
+  margin-bottom: 4.5rem;
+  padding: clamp(2.4rem, 5vw, 3.6rem) 1.5rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 152, 57, 0.16), transparent 68%),
+    linear-gradient(135deg, rgba(91, 108, 255, 0.14), rgba(91, 108, 255, 0.045));
+  border-color: rgba(190, 202, 255, 0.15);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.13);
+}
+
+.lp-final h2 {
+  letter-spacing: -0.04em;
+}
+
+.lp-final p {
+  color: #b0b8d0;
+  line-height: 1.7;
+}
+
+.lp-footer {
+  color: #9da8c4;
+  border-top-color: rgba(190, 202, 255, 0.12);
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .lp-hero {
+    padding-top: 8.5rem;
+    gap: 2rem;
+  }
+
+  .lp-stage {
+    height: 285px;
+  }
+}
+
+/* Smaller tablets */
+@media (max-width: 900px) {
+  .lp-hero {
+    padding-top: 8.25rem;
+    padding-bottom: 3.5rem;
+    gap: 2.4rem;
+  }
+
+  .lp-hero h1 {
+    font-size: clamp(2.5rem, 6.5vw, 3.8rem);
+  }
+
+  .lp-hero-visual {
+    width: 100%;
+    max-width: 650px;
+    margin-inline: auto;
+  }
+
+  .lp-window {
+    width: 100%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .lp-nav-inner {
+    min-height: 70px;
+    padding: 0.7rem 1.1rem;
+  }
+
+  .lp-logo-text {
+    font-size: 1.18rem;
+  }
+
+  .lp-hero {
+    padding: 7.3rem 1.2rem 3rem;
+    gap: 1.8rem;
+  }
+
+  .lp-hero h1 {
+    font-size: clamp(2.35rem, 8.5vw, 3.5rem);
+    line-height: 1.1;
+  }
+
+  .lp-sub {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .lp-hero-visual {
+    padding: 1rem 0.25rem 2rem;
+  }
+
+  .lp-chip-1 {
+    left: 0;
+  }
+
+  .lp-chip-2 {
+    right: 0;
+  }
+
+  .lp-features {
+    padding: 2.5rem 1.2rem 3.5rem;
+  }
+
+  .lp-final {
+    margin-bottom: 3rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 560px) {
+  .lp-logo-text {
+    font-size: 1.08rem;
+  }
+
+  .lp-hero {
+    padding-top: 7rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .lp-hero h1 {
+    font-size: clamp(2.15rem, 9vw, 3rem);
+  }
+
+  .lp-cta {
+    gap: 0.75rem;
+  }
+
+  .lp-btn-lg {
+    min-height: 51px;
+  }
+
+  .lp-stage {
+    height: 235px;
+    padding: 9px;
+  }
+
+  .lp-tile-thumb {
+    width: 68px;
+    height: 50px;
+  }
+
+  .lp-avatar-lg {
+    width: 72px;
+    height: 72px;
+    font-size: 1.7rem;
+  }
+
+  .lp-chip {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.73rem;
+  }
+
+  .lp-chip-2 {
+    bottom: -10px;
+  }
+
+  .lp-ctrl {
+    width: 36px;
+    height: 36px;
+  }
+
+  .lp-section-head {
+    margin-bottom: 1.8rem;
+  }
+
+  .lp-card {
+    padding: 1.35rem;
+  }
+
+  .lp-final {
+    width: calc(100% - 2rem);
+    padding: 2.2rem 1rem;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .lp-window,
+  .lp-chip,
+  .lp-ring,
+  .lp-dot {
+    animation: none;
+  }
+
+  .lp *,
+  .lp *::before,
+  .lp *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
