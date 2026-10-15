@@ -1,7 +1,11 @@
 .meetVideoContainer { 
     position: relative; 
     height: 100vh; 
+    height: 100dvh; 
     background: rgb(1, 4, 48); 
+    --tw: 160px; 
+    --th: 110px; 
+    --bar: 70px; 
 } 
  
 .meetUserVideo { 
@@ -18,6 +22,7 @@
     width: 100vw; 
     bottom: 0; 
     text-align: center; 
+    z-index: 100; 
 } 
  
 .buttonContainers svg { 
@@ -45,6 +50,7 @@
     border-radius: 10px; 
     width: 30vw; 
     padding-inline: 20px; 
+    z-index: 60; 
 } 
  
 .chatContainer { 
@@ -66,8 +72,12 @@
 
     .meetVideoContainer {
         height: 100vh;
+        height: 100dvh;
         width: 100vw;
         overflow: hidden;
+        --tw: 96px;
+        --th: 128px;
+        --bar: 64px;
     }
 
     .meetUserVideo {
@@ -173,4 +183,83 @@
     right: 0;
 
     color: black !important;
+}
+
+/* =========================
+   FOCUS (click-to-enlarge) LAYOUT
+   Focused tile = full screen, everyone else = thumbnails on the right
+   ========================= */
+
+/* ---- remote tiles ---- */
+.tileFocused {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - var(--bar));
+    z-index: 1;
+    background: #000;
+}
+
+.tileFocused video,
+.conferenceView .tileFocused video {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    border-radius: 0;
+    object-fit: contain;
+}
+
+.tileThumb {
+    position: absolute;
+    top: calc(12px + var(--i, 0) * (var(--th) + 10px));
+    right: 12px;
+    width: var(--tw);
+    height: var(--th);
+    z-index: 10;
+}
+
+.tileThumb video,
+.conferenceView .tileThumb video {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    box-sizing: border-box;
+    background: #000;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* ---- local tile (same <video> element, only styling changes) ---- */
+.meetUserVideo.localFocused {
+    top: 0;
+    left: 0;
+    bottom: auto;
+    right: auto;
+    width: 100%;
+    height: calc(100% - var(--bar));
+    max-height: none;
+    border-radius: 0;
+    object-fit: contain;
+    background: #000;
+    z-index: 1;
+}
+
+.meetUserVideo.localThumb {
+    top: calc(12px + var(--i, 0) * (var(--th) + 10px));
+    right: 12px;
+    left: auto;
+    bottom: auto;
+    width: var(--tw);
+    height: var(--th);
+    max-height: none;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    box-sizing: border-box;
+    background: #000;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    z-index: 10;
 }

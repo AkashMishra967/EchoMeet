@@ -59,6 +59,26 @@ export default function VideoMeetComponent() {
 
     let [videos, setVideos] = useState([])
 
+    // Which tile is shown full screen: null (normal grid) | 'local' | remote socketId
+    let [focusedId, setFocusedId] = useState(null)
+
+    // If the focused remote user leaves, fall back to the normal layout
+    const activeFocus = (focusedId === 'local' || videos.some(v => v.socketId === focusedId)) ? focusedId : null
+
+    const toggleFocus = (id) => setFocusedId(prev => (prev === id ? null : id))
+
+    // Everyone who is NOT focused becomes a small thumbnail (stacked on the right)
+    const thumbIds = ['local', ...videos.map(v => v.socketId)].filter(id => id !== activeFocus)
+
+    const getTileClass = (id) => {
+        if (activeFocus === null) return ''
+        return activeFocus === id ? styles.tileFocused : styles.tileThumb
+    }
+    const getLocalClass = () => {
+        if (activeFocus === null) return styles.meetUserVideo
+        return `${styles.meetUserVideo} ${activeFocus === 'local' ? styles.localFocused : styles.localThumb}`
+    }
+
     // TODO
     // if(isChrome() === false) {
 
@@ -533,11 +553,24 @@ export default function VideoMeetComponent() {
                     </div>
 
 
-                    <video className={styles.meetUserVideo} ref={localVideoref} autoPlay muted></video>
+                    <video
+                        className={getLocalClass()}
+                        style={{ '--i': Math.max(thumbIds.indexOf('local'), 0), cursor: 'pointer' }}
+                        onClick={() => toggleFocus('local')}
+                        ref={localVideoref}
+                        autoPlay
+                        muted
+                        playsInline
+                    ></video>
 
                     <div className={styles.conferenceView}>
                         {videos.map((video) => (
-                            <div key={video.socketId}>
+                            <div
+                                key={video.socketId}
+                                className={getTileClass(video.socketId)}
+                                style={{ '--i': Math.max(thumbIds.indexOf(video.socketId), 0), cursor: 'pointer' }}
+                                onClick={() => toggleFocus(video.socketId)}
+                            >
                                 <video
 
                                     data-socket={video.socketId}
