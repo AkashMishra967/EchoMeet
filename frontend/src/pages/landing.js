@@ -1,199 +1,287 @@
-import React, { useState } from 'react'
-import "../App.css"
-import "./landing.css"
-import { Link, useNavigate } from 'react-router-dom'
-
-import VideocamIcon from '@mui/icons-material/Videocam'
-import MicIcon from '@mui/icons-material/Mic'
-import CallEndIcon from '@mui/icons-material/CallEnd'
-import ChatIcon from '@mui/icons-material/Chat'
-import ScreenShareIcon from '@mui/icons-material/ScreenShare'
-import LinkIcon from '@mui/icons-material/Link'
-import HdIcon from '@mui/icons-material/Hd'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-
-const FEATURES = [
-    {
-        icon: <HdIcon />,
-        title: "Crystal-clear video",
-        text: "Smooth, low-latency video and audio powered by peer-to-peer WebRTC connections."
-    },
-    {
-        icon: <ScreenShareIcon />,
-        title: "Screen sharing",
-        text: "Present your screen to everyone in the room with a single click."
-    },
-    {
-        icon: <ChatIcon />,
-        title: "Live chat",
-        text: "Send messages during the call without ever leaving the meeting."
-    },
-    {
-        icon: <LinkIcon />,
-        title: "Join with a link",
-        text: "No downloads, no installs. Share a meeting link and start talking instantly."
-    }
-]
+import React, { useState } from 'react';
+import "../App.css";
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
-
     const router = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const go = (path) => {
+    const goTo = (path) => {
         setMenuOpen(false);
         router(path);
-    }
+    };
 
     return (
-        <div className='lp'>
+        <div className="landingPageContainer">
 
-            {/* ================= NAVBAR ================= */}
-            <header className='lp-nav'>
-                <div className='lp-nav-inner'>
-                    <div className='lp-logo' onClick={() => go("/")}>
-                        <span className='lp-logo-icon'><VideocamIcon /></span>
-                        <span className='lp-logo-text'>Echo<b>Meet</b></span>
-                    </div>
+            {/* Fixed Navigation Bar */}
+            <nav className="landingNav">
 
-                    {/* Desktop menu */}
-                    <nav className='lp-nav-links'>
-                        <button className='lp-link' onClick={() => go("/aljk23")}>Join as Guest</button>
-                        <button className='lp-link' onClick={() => go("/auth")}>Register</button>
-                        <button className='lp-btn lp-btn-primary lp-btn-sm' onClick={() => go("/auth")}>Login</button>
-                    </nav>
+                <Link
+                    to="/"
+                    className="brandMark"
+                    aria-label="Apna Video Call home"
+                >
+                    <span className="brandIcon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect
+                                x="3"
+                                y="6"
+                                width="12"
+                                height="12"
+                                rx="3"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                            />
 
-                    {/* Hamburger (mobile) */}
-                    <button
-                        className={`lp-burger ${menuOpen ? 'open' : ''}`}
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        <span></span><span></span><span></span>
-                    </button>
-                </div>
-
-                {/* Mobile dropdown */}
-                {menuOpen && (
-                    <div className='lp-mobile-menu'>
-                        <button onClick={() => go("/aljk23")}>Join as Guest</button>
-                        <button onClick={() => go("/auth")}>Register</button>
-                        <button className='lp-mobile-login' onClick={() => go("/auth")}>Login</button>
-                    </div>
-                )}
-            </header>
-
-            {/* ================= HERO ================= */}
-            <main className='lp-hero'>
-                <div className='lp-hero-text'>
-                    <span className='lp-badge'>
-                        <span className='lp-dot'></span> Free &amp; secure video meetings
+                            <path
+                                d="m15 10 5-3v10l-5-3"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
                     </span>
 
+                    <span>
+                        Apna <strong>Video Call</strong>
+                    </span>
+                </Link>
+
+                {/* Desktop Navigation */}
+                <div className="navlist">
+
+                    <button
+                        className="navTextButton"
+                        onClick={() => goTo('/aljk23')}
+                    >
+                        Join as Guest
+                    </button>
+
+                    <button
+                        className="navTextButton"
+                        onClick={() => goTo('/auth')}
+                    >
+                        Register
+                    </button>
+
+                    <button
+                        className="navLoginButton"
+                        onClick={() => goTo('/auth')}
+                    >
+                        Log in <span aria-hidden="true">→</span>
+                    </button>
+
+                </div>
+
+                {/* Mobile Hamburger Button */}
+                <button
+                    className="hamburger"
+                    type="button"
+                    aria-label={
+                        menuOpen
+                            ? 'Close navigation menu'
+                            : 'Open navigation menu'
+                    }
+                    aria-expanded={menuOpen}
+                    onClick={() => setMenuOpen(!menuOpen)}
+                >
+                    {menuOpen ? '×' : '☰'}
+                </button>
+
+            </nav>
+
+            {/* Mobile Dropdown Menu */}
+            {menuOpen && (
+                <div className="mobileMenu">
+
+                    <button onClick={() => goTo('/aljk23')}>
+                        Join as Guest
+                    </button>
+
+                    <button onClick={() => goTo('/auth')}>
+                        Register
+                    </button>
+
+                    <button onClick={() => goTo('/auth')}>
+                        Log in
+                    </button>
+
+                </div>
+            )}
+
+            {/* Main Hero Section */}
+            <main className="landingMainContainer">
+
+                {/* Left Content */}
+                <section className="heroCopy">
+
+                    <div className="heroEyebrow">
+                        <span className="liveDot"></span>
+                        SIMPLE. PERSONAL. CONNECTED.
+                    </div>
+
                     <h1>
-                        Video calls that bring <span className='lp-accent'>you closer</span>
+                        Closer to the people
+                        <span>who matter.</span>
                     </h1>
 
-                    <p className='lp-sub'>
-                        Connect with friends, family and teams in HD. No downloads,
-                        no sign-up hassle &mdash; just share a link and start talking.
+                    <p className="heroDescription">
+                        Great conversations can happen anywhere.
+                        Start a video call and make every distance
+                        feel a little smaller.
                     </p>
 
-                    <div className='lp-cta'>
-                        <Link to="/auth" className='lp-btn lp-btn-primary lp-btn-lg'>Get Started</Link>
-                        <button className='lp-btn lp-btn-ghost lp-btn-lg' onClick={() => go("/aljk23")}>
-                            Join as Guest
+                    {/* Action Buttons */}
+                    <div className="heroActions">
+
+                        <Link
+                            className="primaryCta"
+                            to="/auth"
+                        >
+                            Get started
+                            <span aria-hidden="true">↗</span>
+                        </Link>
+
+                        <button
+                            className="secondaryCta"
+                            onClick={() => goTo('/aljk23')}
+                        >
+                            Join as guest
                         </button>
+
                     </div>
 
-                    <ul className='lp-checks'>
-                        <li><CheckCircleIcon /> No installation</li>
-                        <li><CheckCircleIcon /> Screen sharing</li>
-                        <li><CheckCircleIcon /> Live chat</li>
-                    </ul>
-                </div>
+                    {/* Small Trust Message */}
+                    <div className="heroNote">
 
-                {/* ---------- Product mockup ---------- */}
-                <div className='lp-hero-visual' aria-hidden="true">
-                    <div className='lp-glow'></div>
+                        <span className="noteIcon">
+                            ✓
+                        </span>
 
-                    <div className='lp-window'>
-                        <div className='lp-window-bar'>
-                            <i></i><i></i><i></i>
-                            <span className='lp-window-url'><LockOutlinedIcon /> echomeet.app/team-sync</span>
-                        </div>
+                        <span>
+                            Easy to start
+                            <b>·</b>
+                            Made for real conversations
+                        </span>
 
-                        <div className='lp-stage'>
-                            {/* Focused (big) tile */}
-                            <div className='lp-tile lp-tile-main'>
-                                <div className='lp-avatar lp-avatar-lg'>
-                                    <span className='lp-ring'></span>
-                                    A
-                                </div>
-                                <span className='lp-name'><MicIcon /> Akash</span>
-                            </div>
-
-                            {/* Thumbnails */}
-                            <div className='lp-thumbs'>
-                                <div className='lp-tile lp-tile-thumb t1'>
-                                    <div className='lp-avatar'>R</div>
-                                    <span className='lp-name'>Riya</span>
-                                </div>
-                                <div className='lp-tile lp-tile-thumb t2'>
-                                    <div className='lp-avatar'>S</div>
-                                    <span className='lp-name'>Sam</span>
-                                </div>
-                                <div className='lp-tile lp-tile-thumb t3'>
-                                    <div className='lp-avatar'>Y</div>
-                                    <span className='lp-name'>You</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='lp-controls'>
-                            <span className='lp-ctrl'><VideocamIcon /></span>
-                            <span className='lp-ctrl'><MicIcon /></span>
-                            <span className='lp-ctrl lp-ctrl-end'><CallEndIcon /></span>
-                            <span className='lp-ctrl'><ScreenShareIcon /></span>
-                            <span className='lp-ctrl'><ChatIcon /></span>
-                        </div>
                     </div>
 
-                    {/* Floating chips */}
-                    <div className='lp-chip lp-chip-1'><span className='lp-dot'></span> HD Quality</div>
-                    <div className='lp-chip lp-chip-2'><LockOutlinedIcon /> Private &amp; secure</div>
-                </div>
+                </section>
+
+                {/* Right Illustration */}
+                <section
+                    className="heroVisual"
+                    aria-label="Video calling illustration"
+                >
+
+                    <div className="visualGlow"></div>
+
+                    <div className="visualBadge badgeTop">
+
+                        <span className="badgeIcon">
+                            ✦
+                        </span>
+
+                        <span>
+                            <strong>Stay connected</strong>
+                            <small>
+                                Wherever life takes you
+                            </small>
+                        </span>
+
+                    </div>
+
+                    <img
+                        className="heroPhoneImage"
+                        src="/mobile.png"
+                        alt="Illustration of a video call on a mobile phone"
+                    />
+
+                    <div className="visualBadge badgeBottom">
+
+                        <span className="onlineAvatar">
+                            A
+                        </span>
+
+                        <span>
+                            <strong>Your people, closer</strong>
+                            <small>One call away</small>
+                        </span>
+
+                        <span
+                            className="onlineStatus"
+                            aria-label="Online"
+                        ></span>
+
+                    </div>
+
+                </section>
+
             </main>
 
-            {/* ================= FEATURES ================= */}
-            <section className='lp-features'>
-                <div className='lp-section-head'>
-                    <h2>Everything you need for a great call</h2>
-                    <p>Simple, fast and reliable &mdash; built so you can focus on the conversation.</p>
+            {/* Features Section */}
+            <section
+                className="featureStrip"
+                aria-label="Why use Apna Video Call"
+            >
+
+                <div className="featureItem">
+
+                    <span className="featureIcon">
+                        ↗
+                    </span>
+
+                    <span>
+                        <strong>Quick to join</strong>
+                        <small>
+                            Start with just a few clicks
+                        </small>
+                    </span>
+
                 </div>
 
-                <div className='lp-grid'>
-                    {FEATURES.map((f) => (
-                        <div className='lp-card' key={f.title}>
-                            <div className='lp-card-icon'>{f.icon}</div>
-                            <h3>{f.title}</h3>
-                            <p>{f.text}</p>
-                        </div>
-                    ))}
+                <div className="featureDivider"></div>
+
+                <div className="featureItem">
+
+                    <span className="featureIcon">
+                        ◎
+                    </span>
+
+                    <span>
+                        <strong>Personal connection</strong>
+                        <small>
+                            Make time for your people
+                        </small>
+                    </span>
+
                 </div>
+
+                <div className="featureDivider"></div>
+
+                <div className="featureItem">
+
+                    <span className="featureIcon">
+                        ⌁
+                    </span>
+
+                    <span>
+                        <strong>From anywhere</strong>
+                        <small>
+                            Connect across the distance
+                        </small>
+                    </span>
+
+                </div>
+
             </section>
 
-            {/* ================= FINAL CTA ================= */}
-            <section className='lp-final'>
-                <h2>Ready to start your first call?</h2>
-                <p>It takes less than a minute to get going.</p>
-                <Link to="/auth" className='lp-btn lp-btn-primary lp-btn-lg'>Get Started &mdash; it's free</Link>
-            </section>
-
-            <footer className='lp-footer'>
-                &copy; {new Date().getFullYear()} EchoMeet. All rights reserved.
+            {/* Footer */}
+            <footer className="landingFooter">
+                A little closer, wherever you are.
             </footer>
+
         </div>
-    )
+    );
 }
