@@ -39,8 +39,8 @@ const DEV = {
     ],
     github: "https://github.com/AkashMishra967",
     repo: "https://github.com/AkashMishra967/EchoMeet",
-    linkedin: "",                                  // e.g. "https://www.linkedin.com/in/your-name"
-    email: "",                                     // e.g. "you@example.com"
+    linkedin: "https://www.linkedin.com/in/akash-mishra-6ab000375/",                                  // e.g. "https://www.linkedin.com/in/your-name"
+    email: "akashmishra967033@gmail.com",                                     // e.g. "you@example.com"
     resume: "",                                    // e.g. "/resume.pdf" (put the file in frontend/public)
 }
 
