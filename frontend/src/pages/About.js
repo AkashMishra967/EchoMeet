@@ -29,12 +29,12 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 const DEV = {
     name: "Akash Mishra",
     role: "Full Stack Developer",
-    location: "",                                  // e.g. "Lucknow, India"
-    photo: "profile.jpg",                          // put your photo in frontend/public/profile.jpg
-    status: "Creator of EchoMeet",                 // small green badge on the photo ("" hides it)
+    location: "Lucknow",                                  
+    photo: "profile.jpeg",                          
+    status: "Creator of EchoMeet",                 
     intro: "I build fast, real-time web applications and love turning ideas into products people actually use.",
     bio: [
-        "Hi, I'm Akash Mishra, a developer who enjoys building complete products from the first line of code to the live deployment.",
+        "Hi, I'm Akash Mishra, , a developer who enjoys building complete products from the first line of code to the live deployment.",
         "EchoMeet is a video meeting platform I designed and built from scratch. It started as a way to understand how real-time communication works, and grew into a full application with authentication, meeting history, screen sharing and live chat.",
     ],
     github: "https://github.com/AkashMishra967",
