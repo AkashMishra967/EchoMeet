@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
             if (request.status === HttpStatusCode.Ok) {
                 localStorage.setItem("token", request.data.token);
-                navigate("/"); // optional redirect
+                navigate("/home"); // after login go to the Home (dashboard) page
             }
 
         } catch (err) {

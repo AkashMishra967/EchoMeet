@@ -1,50 +1,56 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from '../context/AuthContext';
 import { Snackbar } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import "./authentication.css";
 
+import VideocamIcon from '@mui/icons-material/Videocam';
+import MicIcon from '@mui/icons-material/Mic';
+import CallEndIcon from '@mui/icons-material/CallEnd';
+import ChatIcon from '@mui/icons-material/Chat';
+import ScreenShareIcon from '@mui/icons-material/ScreenShare';
+import HdIcon from '@mui/icons-material/Hd';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
+const HIGHLIGHTS = [
+    { icon: <HdIcon />, title: "HD video & audio", text: "Smooth peer-to-peer calls with low latency." },
+    { icon: <ScreenShareIcon />, title: "Screen sharing", text: "Present to everyone with a single click." },
+    { icon: <ChatIcon />, title: "Live chat", text: "Message the room without leaving the call." },
+    { icon: <TouchAppIcon />, title: "Click to focus", text: "Tap anyone to bring them full screen." },
+];
 
 export default function Authentication() {
 
-    
+    const navigate = useNavigate();
 
-    const [username, setUsername] = React.useState();
-    const [password, setPassword] = React.useState();
-    const [name, setName] = React.useState();
-    const [error, setError] = React.useState();
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [name, setName] = React.useState("");
+    const [error, setError] = React.useState("");
     const [message, setMessage] = React.useState();
 
+    const [formState, setFormState] = React.useState(0);   // 0 = Sign In, 1 = Sign Up
 
-    const [formState, setFormState] = React.useState(0);
-
-    const [open, setOpen] = React.useState(false)
-
+    const [open, setOpen] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
     let handleAuth = async () => {
+        setLoading(true);
         try {
             if (formState === 0) {
 
                 let result = await handleLogin(username, password)
-
 
             }
             if (formState === 1) {
@@ -60,116 +66,215 @@ export default function Authentication() {
         } catch (err) {
 
             console.log(err);
-            let message = (err.response.data.message);
+            let message = err?.response?.data?.message || "Something went wrong. Please try again.";
             setError(message);
+        } finally {
+            setLoading(false);
         }
     }
 
+    const switchMode = (mode) => {
+        setFormState(mode);
+        setError("");
+    }
+
+    const isLogin = formState === 0;
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Grid container component="main" sx={{ height: '100vh' }}>
-                <CssBaseline />
-                <Grid
-                    item
-                    xs={false}
-                    sm={4}
-                    md={7}
-                    sx={{
-                        backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                    <Box
-                        sx={{
-                            my: 8,
-                            mx: 4,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
+        <div className='au'>
 
+            {/* ================= LEFT : BRAND PANEL ================= */}
+            <aside className='au-left'>
+                <div className='au-left-bg'></div>
 
-                        <div>
-                            <Button variant={formState === 0 ? "contained" : ""} onClick={() => { setFormState(0) }}>
-                                Sign In
-                            </Button>
-                            <Button variant={formState === 1 ? "contained" : ""} onClick={() => { setFormState(1) }}>
-                                Sign Up
-                            </Button>
+                <div className='au-left-inner'>
+                    <div className='au-logo' onClick={() => navigate("/")}>
+                        <span className='au-logo-icon'><VideocamIcon /></span>
+                        <span className='au-logo-text'>Echo<b>Meet</b></span>
+                    </div>
+
+                    <div className='au-left-main'>
+                        <h1>
+                            Meetings that feel <span className='au-accent'>effortless</span>
+                        </h1>
+                        <p className='au-left-sub'>
+                            Sign in to host or join secure HD video calls with screen sharing
+                            and live chat &mdash; right from your browser.
+                        </p>
+
+                        {/* Mini product mockup */}
+                        <div className='au-mock' aria-hidden="true">
+                            <div className='au-mock-stage'>
+                                <div className='au-mock-main'>
+                                    <div className='au-mock-avatar'>
+                                        <span className='au-mock-ring'></span>A
+                                    </div>
+                                    <span className='au-mock-name'><MicIcon /> Akash</span>
+                                </div>
+                                <div className='au-mock-thumbs'>
+                                    <div className='au-mock-thumb t1'>R</div>
+                                    <div className='au-mock-thumb t2'>S</div>
+                                    <div className='au-mock-thumb t3'>Y</div>
+                                </div>
+                            </div>
+                            <div className='au-mock-controls'>
+                                <span><VideocamIcon /></span>
+                                <span><MicIcon /></span>
+                                <span className='end'><CallEndIcon /></span>
+                                <span><ScreenShareIcon /></span>
+                                <span><ChatIcon /></span>
+                            </div>
                         </div>
 
-                        <Box component="form" noValidate sx={{ mt: 1 }}>
-                            {formState === 1 ? <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="username"
-                                label="Full Name"
-                                name="username"
-                                value={name}
-                                autoFocus
-                                onChange={(e) => setName(e.target.value)}
-                            /> : <></>}
+                        <ul className='au-highlights'>
+                            {HIGHLIGHTS.map((h) => (
+                                <li key={h.title}>
+                                    <span className='au-hl-icon'>{h.icon}</span>
+                                    <div>
+                                        <strong>{h.title}</strong>
+                                        <span>{h.text}</span>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="username"
-                                label="Username"
-                                name="username"
-                                value={username}
-                                autoFocus
-                                onChange={(e) => setUsername(e.target.value)}
+                    <div className='au-left-foot'>
+                        <LockOutlinedIcon /> Private &amp; secure &middot; No downloads required
+                    </div>
+                </div>
+            </aside>
 
-                            />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                value={password}
-                                type="password"
-                                onChange={(e) => setPassword(e.target.value)}
+            {/* ================= RIGHT : FORM ================= */}
+            <main className='au-right'>
+                <button className='au-back' onClick={() => navigate("/")}>
+                    <ArrowBackIcon /> Back to home
+                </button>
 
-                                id="password"
-                            />
+                <div className='au-card'>
+                    {/* Compact logo (shown on mobile where the left panel is hidden) */}
+                    <div className='au-logo au-logo-mobile' onClick={() => navigate("/")}>
+                        <span className='au-logo-icon'><VideocamIcon /></span>
+                        <span className='au-logo-text'>Echo<b>Meet</b></span>
+                    </div>
 
-                            <p style={{ color: "red" }}>{error}</p>
+                    <div className='au-head'>
+                        <h2>{isLogin ? "Welcome back" : "Create your account"}</h2>
+                        <p>
+                            {isLogin
+                                ? "Sign in to continue to your meetings."
+                                : "Join EchoMeet and start your first call in seconds."}
+                        </p>
+                    </div>
 
-                            <Button
-                                type="button"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                                onClick={handleAuth}
-                            >
-                                {formState === 0 ? "Login " : "Register"}
-                            </Button>
+                    {/* Sign In / Sign Up switch */}
+                    <div className={`au-tabs ${isLogin ? 'is-login' : 'is-signup'}`} role="tablist">
+                        <span className='au-tab-pill'></span>
+                        <button type="button" role="tab" aria-selected={isLogin} className={isLogin ? 'active' : ''} onClick={() => switchMode(0)}>
+                            Sign In
+                        </button>
+                        <button type="button" role="tab" aria-selected={!isLogin} className={!isLogin ? 'active' : ''} onClick={() => switchMode(1)}>
+                            Sign Up
+                        </button>
+                    </div>
 
-                        </Box>
-                    </Box>
-                </Grid>
-            </Grid>
+                    <form
+                        className='au-form'
+                        noValidate
+                        onSubmit={(e) => { e.preventDefault(); if (!loading) handleAuth(); }}
+                    >
+                        {!isLogin && (
+                            <div className='au-field'>
+                                <label htmlFor="fullname">Full Name</label>
+                                <div className='au-input'>
+                                    <BadgeOutlinedIcon />
+                                    <input
+                                        id="fullname"
+                                        name="fullname"
+                                        type="text"
+                                        placeholder="Your full name"
+                                        autoComplete="name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        autoFocus
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        <div className='au-field'>
+                            <label htmlFor="username">Username</label>
+                            <div className='au-input'>
+                                <PersonOutlineIcon />
+                                <input
+                                    id="username"
+                                    name="username"
+                                    type="text"
+                                    placeholder="Enter your username"
+                                    autoComplete="username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    autoFocus={isLogin}
+                                />
+                            </div>
+                        </div>
+
+                        <div className='au-field'>
+                            <label htmlFor="password">Password</label>
+                            <div className='au-input'>
+                                <LockOutlinedIcon />
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter your password"
+                                    autoComplete={isLogin ? "current-password" : "new-password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <button
+                                    type="button"
+                                    className='au-eye'
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {error && <div className='au-error' role="alert">{error}</div>}
+
+                        <button type="submit" className='au-submit' disabled={loading}>
+                            {loading
+                                ? <span className='au-spinner'></span>
+                                : <>{isLogin ? "Login" : "Create account"} <ArrowForwardIcon /></>}
+                        </button>
+                    </form>
+
+                    <p className='au-switch'>
+                        {isLogin ? "Don't have an account?" : "Already have an account?"}
+                        <button type="button" onClick={() => switchMode(isLogin ? 1 : 0)}>
+                            {isLogin ? "Sign up" : "Sign in"}
+                        </button>
+                    </p>
+
+                    <div className='au-divider'><span>or</span></div>
+
+                    <button type="button" className='au-guest' onClick={() => navigate("/aljk23")}>
+                        Continue as Guest
+                    </button>
+
+                    <p className='au-note'><CheckCircleIcon /> No credit card required</p>
+                </div>
+            </main>
 
             <Snackbar
-
                 open={open}
                 autoHideDuration={4000}
                 message={message}
+                onClose={() => setOpen(false)}
             />
-
-        </ThemeProvider>
+        </div>
     );
 }

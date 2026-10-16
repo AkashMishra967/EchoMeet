@@ -1,4 +1,3 @@
-
 import './App.css';
 import {Route,BrowserRouter as Router,Routes} from 'react-router-dom';
 import LandingPage from './pages/landing';
@@ -17,8 +16,8 @@ function App() {
     <Route path='/'element={<LandingPage/>} />
     <Route path="auth" element={<Authentication />} />
     <Route path="/history" element={<History />} />
+    <Route path="/home" element={<HomeComponent />} />
   <Route path="/:url" element={<VideoMeetComponent />} />
-  <Route path='/:home' element={<HomeComponent />} />
   </Routes>
   </AuthProvider>
 </Router>

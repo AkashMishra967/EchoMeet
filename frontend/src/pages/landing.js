@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../App.css"
 import "./landing.css"
 import { Link, useNavigate } from 'react-router-dom'
@@ -12,12 +12,20 @@ import LinkIcon from '@mui/icons-material/Link'
 import HdIcon from '@mui/icons-material/Hd'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import TouchAppIcon from '@mui/icons-material/TouchApp'
+import DevicesIcon from '@mui/icons-material/Devices'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 const FEATURES = [
     {
         icon: <HdIcon />,
         title: "Crystal-clear video",
         text: "Smooth, low-latency video and audio powered by peer-to-peer WebRTC connections."
+    },
+    {
+        icon: <TouchAppIcon />,
+        title: "Click to focus",
+        text: "Tap anyone's video to bring them full screen. Tap again to return to the grid."
     },
     {
         icon: <ScreenShareIcon />,
@@ -33,35 +41,97 @@ const FEATURES = [
         icon: <LinkIcon />,
         title: "Join with a link",
         text: "No downloads, no installs. Share a meeting link and start talking instantly."
+    },
+    {
+        icon: <DevicesIcon />,
+        title: "Works on every device",
+        text: "Laptop, tablet or phone — EchoMeet adapts to your screen right in the browser."
     }
+]
+
+const STEPS = [
+    { n: "01", title: "Sign in or join as guest", text: "Create an account in seconds, or jump straight in as a guest." },
+    { n: "02", title: "Share your meeting link", text: "Enter a meeting code and send the link to anyone you want to talk to." },
+    { n: "03", title: "Start talking", text: "Turn on your camera and mic, share your screen and chat live." }
+]
+
+const STATS = [
+    { value: "HD", label: "Video quality" },
+    { value: "1-click", label: "Join with a link" },
+    { value: "0", label: "Downloads needed" },
+    { value: "Free", label: "To get started" }
 ]
 
 export default function LandingPage() {
 
     const router = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    // logged-in users see Dashboard / History / Logout instead of Login / Register
+    const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
+    const logout = () => {
+        localStorage.removeItem("token");
+        setLoggedIn(false);
+        setMenuOpen(false);
+    }
+
+    // Navbar gets a glass background after the user scrolls a little
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 10);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    // Smooth scrolling only while the landing page is open
+    useEffect(() => {
+        const prev = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = 'smooth';
+        return () => { document.documentElement.style.scrollBehavior = prev; };
+    }, []);
 
     const go = (path) => {
         setMenuOpen(false);
         router(path);
     }
 
+    const scrollTo = (id) => {
+        setMenuOpen(false);
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     return (
         <div className='lp'>
 
-            {/* ================= NAVBAR ================= */}
-            <header className='lp-nav'>
+            {/* ================= NAVBAR (fixed) ================= */}
+            <header className={`lp-nav ${scrolled || menuOpen ? 'scrolled' : ''}`}>
                 <div className='lp-nav-inner'>
-                    <div className='lp-logo' onClick={() => go("/")}>
+                    <div className='lp-logo' onClick={() => { setMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                         <span className='lp-logo-icon'><VideocamIcon /></span>
                         <span className='lp-logo-text'>Echo<b>Meet</b></span>
                     </div>
 
                     {/* Desktop menu */}
                     <nav className='lp-nav-links'>
-                        <button className='lp-link' onClick={() => go("/aljk23")}>Join as Guest</button>
-                        <button className='lp-link' onClick={() => go("/auth")}>Register</button>
-                        <button className='lp-btn lp-btn-primary lp-btn-sm' onClick={() => go("/auth")}>Login</button>
+                        <button className='lp-link' onClick={() => scrollTo("features")}>Features</button>
+                        <button className='lp-link' onClick={() => scrollTo("how")}>How it works</button>
+                        {loggedIn ? (
+                            <>
+                                <button className='lp-link' onClick={() => go("/history")}>History</button>
+                                <span className='lp-nav-sep'></span>
+                                <button className='lp-link' onClick={logout}>Logout</button>
+                                <button className='lp-btn lp-btn-primary lp-btn-sm' onClick={() => go("/home")}>Dashboard</button>
+                            </>
+                        ) : (
+                            <>
+                                <button className='lp-link' onClick={() => go("/aljk23")}>Join as Guest</button>
+                                <span className='lp-nav-sep'></span>
+                                <button className='lp-link' onClick={() => go("/auth")}>Register</button>
+                                <button className='lp-btn lp-btn-primary lp-btn-sm' onClick={() => go("/auth")}>Login</button>
+                            </>
+                        )}
                     </nav>
 
                     {/* Hamburger (mobile) */}
@@ -77,9 +147,21 @@ export default function LandingPage() {
                 {/* Mobile dropdown */}
                 {menuOpen && (
                     <div className='lp-mobile-menu'>
-                        <button onClick={() => go("/aljk23")}>Join as Guest</button>
-                        <button onClick={() => go("/auth")}>Register</button>
-                        <button className='lp-mobile-login' onClick={() => go("/auth")}>Login</button>
+                        <button onClick={() => scrollTo("features")}>Features</button>
+                        <button onClick={() => scrollTo("how")}>How it works</button>
+                        {loggedIn ? (
+                            <>
+                                <button onClick={() => go("/history")}>History</button>
+                                <button onClick={logout}>Logout</button>
+                                <button className='lp-mobile-login' onClick={() => go("/home")}>Dashboard</button>
+                            </>
+                        ) : (
+                            <>
+                                <button onClick={() => go("/aljk23")}>Join as Guest</button>
+                                <button onClick={() => go("/auth")}>Register</button>
+                                <button className='lp-mobile-login' onClick={() => go("/auth")}>Login</button>
+                            </>
+                        )}
                     </div>
                 )}
             </header>
@@ -92,16 +174,19 @@ export default function LandingPage() {
                     </span>
 
                     <h1>
-                        Video calls that bring <span className='lp-accent'>you closer</span>
+                        Talk face to face, <span className='lp-accent'>from anywhere</span>
                     </h1>
 
                     <p className='lp-sub'>
-                        Connect with friends, family and teams in HD. No downloads,
-                        no sign-up hassle &mdash; just share a link and start talking.
+                        High-quality video calls with screen sharing and live chat, right in
+                        your browser. No downloads and no hassle &mdash; just share a link
+                        and start talking.
                     </p>
 
                     <div className='lp-cta'>
-                        <Link to="/auth" className='lp-btn lp-btn-primary lp-btn-lg'>Get Started</Link>
+                        <Link to={loggedIn ? "/home" : "/auth"} className='lp-btn lp-btn-primary lp-btn-lg'>
+                            {loggedIn ? "Go to Dashboard" : "Get Started"} <ArrowForwardIcon />
+                        </Link>
                         <button className='lp-btn lp-btn-ghost lp-btn-lg' onClick={() => go("/aljk23")}>
                             Join as Guest
                         </button>
@@ -125,7 +210,6 @@ export default function LandingPage() {
                         </div>
 
                         <div className='lp-stage'>
-                            {/* Focused (big) tile */}
                             <div className='lp-tile lp-tile-main'>
                                 <div className='lp-avatar lp-avatar-lg'>
                                     <span className='lp-ring'></span>
@@ -134,7 +218,6 @@ export default function LandingPage() {
                                 <span className='lp-name'><MicIcon /> Akash</span>
                             </div>
 
-                            {/* Thumbnails */}
                             <div className='lp-thumbs'>
                                 <div className='lp-tile lp-tile-thumb t1'>
                                     <div className='lp-avatar'>R</div>
@@ -160,15 +243,25 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    {/* Floating chips */}
                     <div className='lp-chip lp-chip-1'><span className='lp-dot'></span> HD Quality</div>
                     <div className='lp-chip lp-chip-2'><LockOutlinedIcon /> Private &amp; secure</div>
                 </div>
             </main>
 
+            {/* ================= STATS ================= */}
+            <section className='lp-stats'>
+                {STATS.map((s) => (
+                    <div className='lp-stat' key={s.label}>
+                        <strong>{s.value}</strong>
+                        <span>{s.label}</span>
+                    </div>
+                ))}
+            </section>
+
             {/* ================= FEATURES ================= */}
-            <section className='lp-features'>
+            <section className='lp-features' id='features'>
                 <div className='lp-section-head'>
+                    <span className='lp-eyebrow'>Features</span>
                     <h2>Everything you need for a great call</h2>
                     <p>Simple, fast and reliable &mdash; built so you can focus on the conversation.</p>
                 </div>
@@ -184,15 +277,56 @@ export default function LandingPage() {
                 </div>
             </section>
 
+            {/* ================= HOW IT WORKS ================= */}
+            <section className='lp-how' id='how'>
+                <div className='lp-section-head'>
+                    <span className='lp-eyebrow'>How it works</span>
+                    <h2>Up and running in three steps</h2>
+                    <p>From zero to your first call in under a minute.</p>
+                </div>
+
+                <div className='lp-steps'>
+                    {STEPS.map((s) => (
+                        <div className='lp-step' key={s.n}>
+                            <span className='lp-step-n'>{s.n}</span>
+                            <h3>{s.title}</h3>
+                            <p>{s.text}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
             {/* ================= FINAL CTA ================= */}
             <section className='lp-final'>
                 <h2>Ready to start your first call?</h2>
-                <p>It takes less than a minute to get going.</p>
-                <Link to="/auth" className='lp-btn lp-btn-primary lp-btn-lg'>Get Started &mdash; it's free</Link>
+                <p>Create a free account or hop in as a guest &mdash; it takes less than a minute.</p>
+                <div className='lp-cta lp-cta-center'>
+                    <Link to={loggedIn ? "/home" : "/auth"} className='lp-btn lp-btn-white lp-btn-lg'>
+                        {loggedIn ? "Go to Dashboard" : <>Get Started &mdash; it's free</>} <ArrowForwardIcon />
+                    </Link>
+                    <button className='lp-btn lp-btn-outline lp-btn-lg' onClick={() => go("/aljk23")}>
+                        Join as Guest
+                    </button>
+                </div>
             </section>
 
+            {/* ================= FOOTER ================= */}
             <footer className='lp-footer'>
-                &copy; {new Date().getFullYear()} EchoMeet. All rights reserved.
+                <div className='lp-footer-inner'>
+                    <div className='lp-logo'>
+                        <span className='lp-logo-icon'><VideocamIcon /></span>
+                        <span className='lp-logo-text'>Echo<b>Meet</b></span>
+                    </div>
+                    <div className='lp-footer-links'>
+                        <button onClick={() => scrollTo("features")}>Features</button>
+                        <button onClick={() => scrollTo("how")}>How it works</button>
+                        <button onClick={() => go("/aljk23")}>Join as Guest</button>
+                        {loggedIn
+                            ? <button onClick={() => go("/history")}>History</button>
+                            : <button onClick={() => go("/auth")}>Login</button>}
+                    </div>
+                    <span className='lp-copy'>&copy; {new Date().getFullYear()} EchoMeet. All rights reserved.</span>
+                </div>
             </footer>
         </div>
     )
