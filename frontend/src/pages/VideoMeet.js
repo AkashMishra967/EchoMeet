@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import io from "socket.io-client";
-import { Badge, IconButton, TextField } from '@mui/material';
-import { Button } from '@mui/material';
+import { Badge, IconButton, Tooltip } from '@mui/material';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 import styles from "../styles/videoComponent.module.css";
@@ -12,6 +11,14 @@ import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import StopScreenShareIcon from '@mui/icons-material/StopScreenShare'
 import ChatIcon from '@mui/icons-material/Chat'
 import server from '../environment';
+import { useNavigate, useParams } from 'react-router-dom';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 
 const server_url = server;
@@ -28,6 +35,11 @@ export default function VideoMeetComponent() {
 
     var socketRef = useRef();
     let socketIdRef = useRef();
+
+    // lobby helpers
+    const lobbyNavigate = useNavigate();
+    const { url: roomCode } = useParams();
+    const chatEndRef = useRef(null);
 
     let localVideoref = useRef();
 
@@ -49,7 +61,7 @@ export default function VideoMeetComponent() {
 
     let [message, setMessage] = useState("");
 
-    let [newMessages, setNewMessages] = useState(3);
+    let [newMessages, setNewMessages] = useState(0);
 
     let [askForUsername, setAskForUsername] = useState(true);
 
@@ -452,8 +464,13 @@ export default function VideoMeetComponent() {
 
 
 
+    // keep the newest chat message in view
+    useEffect(() => {
+        if (chatEndRef.current) chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }, [messages, showModal]);
+
     let sendMessage = () => {
-        console.log(socketRef.current);
+        if (!message.trim()) return;
         socketRef.current.emit('chat-message', message, username)
         setMessage("");
 
@@ -462,6 +479,7 @@ export default function VideoMeetComponent() {
 
     
     let connect = () => {
+        if (!username.trim()) setUsername("Guest");
         setAskForUsername(false);
         getMedia();
     }
@@ -472,83 +490,208 @@ export default function VideoMeetComponent() {
 
             {askForUsername === true ?
 
-                <div>
-                    <h2>Enter into Lobby </h2>
-                    <br></br>
-                    <TextField id="outlined-basic" label="Username" value={username} onChange={e => setUsername(e.target.value)} variant="outlined" />
-                    <Button  style={{position:'relative', left:'20px', top:"8px"}}variant="contained" onClick={connect}>Connect</Button>
+                <div className={styles.lobby}>
 
+                    {/* top bar */}
+                    <header className={styles.lobbyNav}>
+                        <div className={styles.lobbyLogo} onClick={() => lobbyNavigate("/")}>
+                            <span className={styles.lobbyLogoIcon}><VideocamIcon /></span>
+                            <span className={styles.lobbyLogoText}>Echo<b>Meet</b></span>
+                        </div>
+                        <button className={styles.lobbyBack} onClick={() => lobbyNavigate("/")}>
+                            <ArrowBackIcon /> <span>Back to home</span>
+                        </button>
+                    </header>
 
-                    <div>
-                        <video ref={localVideoref} autoPlay muted></video>
-                    </div>
+                    <main className={styles.lobbyMain}>
 
+                        {/* ---------- camera preview ---------- */}
+                        <section className={styles.lobbyPreview}>
+                            <div className={styles.lobbyVideoWrap}>
+                                <video ref={localVideoref} autoPlay muted playsInline></video>
+
+                                <div className={styles.lobbyStatus}>
+                                    <span className={videoAvailable ? styles.ok : styles.bad}>
+                                        {videoAvailable ? <VideocamIcon /> : <VideocamOffIcon />}
+                                        {videoAvailable ? "Camera ready" : "Camera blocked"}
+                                    </span>
+                                    <span className={audioAvailable ? styles.ok : styles.bad}>
+                                        {audioAvailable ? <MicIcon /> : <MicOffIcon />}
+                                        {audioAvailable ? "Mic ready" : "Mic blocked"}
+                                    </span>
+                                </div>
+                            </div>
+                            <p className={styles.lobbyHint}>
+                                This is how others will see you. Allow camera and microphone
+                                access in your browser if the preview is empty.
+                            </p>
+                        </section>
+
+                        {/* ---------- join card ---------- */}
+                        <section className={styles.lobbyCard}>
+                            <span className={styles.lobbyBadge}>
+                                <span className={styles.lobbyDot}></span> Ready to join
+                            </span>
+
+                            <h2>Join the <span className={styles.lobbyAccent}>meeting</span></h2>
+                            <p className={styles.lobbySub}>Enter your name so everyone knows who you are.</p>
+
+                            {roomCode && (
+                                <div className={styles.lobbyCode}>
+                                    <span>Meeting code</span>
+                                    <strong>{decodeURIComponent(roomCode)}</strong>
+                                </div>
+                            )}
+
+                            <form
+                                className={styles.lobbyForm}
+                                onSubmit={(e) => { e.preventDefault(); connect(); }}
+                            >
+                                <label htmlFor="lobby-name">Your name</label>
+                                <div className={styles.lobbyInput}>
+                                    <PersonOutlineIcon />
+                                    <input
+                                        id="lobby-name"
+                                        type="text"
+                                        placeholder="Enter your name"
+                                        autoComplete="name"
+                                        autoFocus
+                                        value={username}
+                                        onChange={e => setUsername(e.target.value)}
+                                    />
+                                </div>
+
+                                <button type="submit" className={styles.lobbyJoin}>
+                                    Join now <ArrowForwardIcon />
+                                </button>
+                            </form>
+
+                            <p className={styles.lobbyNote}><LockOutlinedIcon /> Private &amp; secure &middot; No downloads required</p>
+                        </section>
+                    </main>
                 </div> :
 
 
                 <div className={styles.meetVideoContainer}>
 
+                    {/* ---------- meeting info chip ---------- */}
+                    <div className={styles.meetInfo}>
+                        <span className={styles.meetLive}><span className={styles.meetLiveDot}></span> Live</span>
+                        {roomCode && <span className={styles.meetCode}>{decodeURIComponent(roomCode)}</span>}
+                        <span className={styles.meetCount}><PeopleAltOutlinedIcon /> {videos.length + 1}</span>
+                    </div>
+
+                    {/* ---------- chat panel ---------- */}
                     {showModal ? <div className={styles.chatRoom}>
 
-                        <div className={styles.chatContainer}>
-
-    <div className={styles.chatHeader}>
-        <h1>Chat</h1>
-
-        <IconButton
-            onClick={closeChat}
-            className={styles.closeChatButton}
-        >
-            <CloseIcon />
-        </IconButton>
-    </div>
-
-    <div className={styles.chattingDisplay}>
-
-                                {messages.length !== 0 ? messages.map((item, index) => {
-
-                                    console.log(messages)
-                                    return (
-                                        <div style={{ marginBottom: "20px" }} key={index}>
-                                            <p style={{ fontWeight: "bold" }}>{item.sender}</p>
-                                            <p>{item.data}</p>
-                                        </div>
-                                    )
-                                }) : <p>No Messages Yet</p>}
-
-
+                        <div className={styles.chatHead}>
+                            <div>
+                                <h3>In-call chat</h3>
+                                <span>{messages.length} message{messages.length === 1 ? "" : "s"}</span>
                             </div>
-
-                            <div className={styles.chattingArea}>
-                                <TextField  style={{position:'relative', bottom:"10px", width:"220px"}}value={message} onChange={(e) => setMessage(e.target.value)} id="outlined-basic" label="Enter Your chat" variant="outlined" />
-                                <Button style={{position:'relative',left:'30px'}} variant='contained' onClick={sendMessage}>Send</Button>
-                            </div>
-
-
+                            <IconButton onClick={closeChat} className={styles.chatClose} aria-label="Close chat">
+                                <CloseIcon />
+                            </IconButton>
                         </div>
+
+                        <div className={styles.chatBody}>
+                            {messages.length !== 0 ? messages.map((item, index) => {
+                                const mine = item.sender === username;
+                                return (
+                                    <div className={`${styles.msgRow} ${mine ? styles.msgMine : ''}`} key={index}>
+                                        {!mine && <span className={styles.msgSender}>{item.sender}</span>}
+                                        <div className={styles.msgBubble}>{item.data}</div>
+                                    </div>
+                                )
+                            }) : (
+                                <div className={styles.chatEmpty}>
+                                    <ChatBubbleOutlineIcon />
+                                    <strong>No messages yet</strong>
+                                    <span>Say hello to everyone in the call.</span>
+                                </div>
+                            )}
+                            <div ref={chatEndRef}></div>
+                        </div>
+
+                        <form
+                            className={styles.chatForm}
+                            onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
+                        >
+                            <input
+                                type="text"
+                                placeholder="Type a message..."
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                aria-label="Message"
+                            />
+                            <button type="submit" className={styles.chatSend} disabled={!message.trim()} aria-label="Send message">
+                                <SendRoundedIcon />
+                            </button>
+                        </form>
                     </div> : <></>}
 
 
+                    {/* ---------- call controls ---------- */}
                     <div className={styles.buttonContainers}>
-                        <IconButton onClick={handleVideo} style={{ color: "white" }}>
-                            {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
-                        </IconButton>
-                        <IconButton onClick={handleEndCall} style={{ color: "red" }}>
-                            <CallEndIcon  />
-                        </IconButton>
-                        <IconButton onClick={handleAudio} style={{ color: "white" }}>
-                            {audio === true ? <MicIcon /> : <MicOffIcon />}
-                        </IconButton>
+
+                        <Tooltip title={video === true ? "Turn off camera" : "Turn on camera"} arrow placement="top">
+                            <IconButton
+                                onClick={handleVideo}
+                                className={`${styles.ctrlBtn} ${video === true ? '' : styles.ctrlOff}`}
+                                aria-label="Toggle camera"
+                            >
+                                {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title={audio === true ? "Mute microphone" : "Unmute microphone"} arrow placement="top">
+                            <IconButton
+                                onClick={handleAudio}
+                                className={`${styles.ctrlBtn} ${audio === true ? '' : styles.ctrlOff}`}
+                                aria-label="Toggle microphone"
+                            >
+                                {audio === true ? <MicIcon /> : <MicOffIcon />}
+                            </IconButton>
+                        </Tooltip>
 
                         {screenAvailable === true ?
-                            <IconButton onClick={handleScreen} style={{ color: "white" }}>
-                                {screen === true ? <ScreenShareIcon /> : <StopScreenShareIcon />}
-                            </IconButton> : <></>}
+                            <Tooltip title={screen === true ? "Stop sharing" : "Share screen"} arrow placement="top">
+                                <IconButton
+                                    onClick={handleScreen}
+                                    className={`${styles.ctrlBtn} ${screen === true ? styles.ctrlActive : ''}`}
+                                    aria-label="Share screen"
+                                >
+                                    {screen === true ? <StopScreenShareIcon /> : <ScreenShareIcon />}
+                                </IconButton>
+                            </Tooltip> : <></>}
 
-                        <Badge badgeContent={newMessages} max={999} color='orange'>
-                            <IconButton onClick={() => setModal(!showModal)} style={{ color: "white" }}>
-                                <ChatIcon />                        </IconButton>
+                        <Badge
+                            badgeContent={showModal ? 0 : newMessages}
+                            max={99}
+                            sx={{ '& .MuiBadge-badge': { background: '#f59e0b', color: '#fff', fontWeight: 700, top: 6, right: 6 } }}
+                        >
+                            <Tooltip title={showModal ? "Close chat" : "Open chat"} arrow placement="top">
+                                <IconButton
+                                    onClick={() => (showModal ? closeChat() : openChat())}
+                                    className={`${styles.ctrlBtn} ${showModal ? styles.ctrlActive : ''}`}
+                                    aria-label="Toggle chat"
+                                >
+                                    <ChatIcon />
+                                </IconButton>
+                            </Tooltip>
                         </Badge>
+
+                        <span className={styles.ctrlDivider}></span>
+
+                        <Tooltip title="Leave call" arrow placement="top">
+                            <IconButton
+                                onClick={handleEndCall}
+                                className={`${styles.ctrlBtn} ${styles.ctrlEnd}`}
+                                aria-label="Leave call"
+                            >
+                                <CallEndIcon />
+                            </IconButton>
+                        </Tooltip>
 
                     </div>
 
