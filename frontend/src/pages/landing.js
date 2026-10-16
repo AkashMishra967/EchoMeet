@@ -122,6 +122,7 @@ export default function LandingPage() {
                     <nav className='lp-nav-links'>
                         <button className='lp-link' onClick={() => scrollTo("features")}>Features</button>
                         <button className='lp-link' onClick={() => scrollTo("how")}>How it works</button>
+                        <button className='lp-link' onClick={() => go("/about")}>About</button>
                         {loggedIn ? (
                             <>
                                 <button className='lp-link' onClick={() => go("/history")}>History</button>
@@ -154,6 +155,7 @@ export default function LandingPage() {
                     <div className='lp-mobile-menu'>
                         <button onClick={() => scrollTo("features")}>Features</button>
                         <button onClick={() => scrollTo("how")}>How it works</button>
+                        <button onClick={() => go("/about")}>About</button>
                         {loggedIn ? (
                             <>
                                 <button onClick={() => go("/history")}>History</button>
@@ -325,6 +327,7 @@ export default function LandingPage() {
                     <div className='lp-footer-links'>
                         <button onClick={() => scrollTo("features")}>Features</button>
                         <button onClick={() => scrollTo("how")}>How it works</button>
+                        <button onClick={() => go("/about")}>About</button>
                         <button onClick={() => openGuest()}>Join as Guest</button>
                         {loggedIn
                             ? <button onClick={() => go("/history")}>History</button>

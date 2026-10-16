@@ -4,6 +4,7 @@ import VideocamIcon from '@mui/icons-material/Videocam'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import HistoryIcon from '@mui/icons-material/History'
 import LogoutIcon from '@mui/icons-material/Logout'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
 // Shared top bar for the logged-in pages (Home + History)
 export default function DashNav({ active }) {
@@ -34,6 +35,12 @@ export default function DashNav({ active }) {
                         onClick={() => navigate("/history")}
                     >
                         <HistoryIcon /> <span>History</span>
+                    </button>
+                    <button
+                        className={`db-navbtn ${active === 'about' ? 'active' : ''}`}
+                        onClick={() => navigate("/about")}
+                    >
+                        <InfoOutlinedIcon /> <span>About</span>
                     </button>
                     <button className='db-navbtn db-logout' onClick={logout}>
                         <LogoutIcon /> <span>Logout</span>

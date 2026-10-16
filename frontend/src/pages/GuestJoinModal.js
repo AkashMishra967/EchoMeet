@@ -10,7 +10,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 
 // words that are real pages of the app, so they can't be used as a meeting code
-export const RESERVED_CODES = ["auth", "home", "history"];
+export const RESERVED_CODES = ["auth", "home", "history", "about"];
 
 // random readable meeting code like "kqz-mdvr-twa"
 export const generateCode = () => {
