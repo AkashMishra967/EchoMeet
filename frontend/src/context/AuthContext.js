@@ -2,11 +2,22 @@ import axios, { HttpStatusCode } from "axios";
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import server from "../environment";
+import { requestStarted, requestFinished } from "../utils/loadingBus";
 export const AuthContext = createContext({});
 
 const client = axios.create({
     baseURL: `${server}/api/v1/users`
 });
+
+// show the "starting the server" loader if a request takes too long
+client.interceptors.request.use((config) => {
+    requestStarted();
+    return config;
+});
+client.interceptors.response.use(
+    (response) => { requestFinished(); return response; },
+    (error) => { requestFinished(); return Promise.reject(error); }
+);
 
 export const AuthProvider = ({ children }) => {
 
