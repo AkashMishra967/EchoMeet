@@ -34,7 +34,7 @@ const DEV = {
     status: "Creator of EchoMeet",                 
     intro: "I build fast, real-time web applications and love turning ideas into products people actually use.",
     bio: [
-        "Hi, I'm Akash Mishra, , a developer who enjoys building complete products from the first line of code to the live deployment.",
+        "Hi, I'm Akash Mishra,Full-Sttack Developer and completed Bachelor of Computer Application from Kamla Nehru Insitute of Physical and Social Science, Sultanpur and he Master of Computer Application from Dr. A.P.J Abdul Kalam Technical University Uttar Pardesh,He is a Full-Stack Developer with knowledge of Data Structure and Algorithm, Java and Python.He also knowledge of logical resoning and quantitative aptitude  a developer who enjoys building complete products from the first line of code to the live deployment.",
         "EchoMeet is a video meeting platform I designed and built from scratch. It started as a way to understand how real-time communication works, and grew into a full application with authentication, meeting history, screen sharing and live chat.",
     ],
     github: "https://github.com/AkashMishra967",
