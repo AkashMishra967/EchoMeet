@@ -20,6 +20,8 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CloseIcon from '@mui/icons-material/Close';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
 
 const server_url = server;
 
@@ -40,6 +42,22 @@ export default function VideoMeetComponent() {
     const lobbyNavigate = useNavigate();
     const { url: roomCode } = useParams();
     const chatEndRef = useRef(null);
+
+    // copy the meeting link to share it
+    const [linkCopied, setLinkCopied] = useState(false);
+    const copyMeetingLink = async () => {
+        const link = window.location.href;
+        try {
+            await navigator.clipboard.writeText(link);
+        } catch (e) {
+            const t = document.createElement("textarea");
+            t.value = link; document.body.appendChild(t); t.select();
+            try { document.execCommand("copy"); } catch (_) { }
+            document.body.removeChild(t);
+        }
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 1800);
+    }
 
     let localVideoref = useRef();
 
@@ -540,6 +558,9 @@ export default function VideoMeetComponent() {
                                 <div className={styles.lobbyCode}>
                                     <span>Meeting code</span>
                                     <strong>{decodeURIComponent(roomCode)}</strong>
+                                    <button type="button" className={`${styles.copyBtn} ${linkCopied ? styles.copied : ''}`} onClick={copyMeetingLink} title="Copy meeting link" aria-label="Copy meeting link">
+                                        {linkCopied ? <CheckIcon /> : <ContentCopyIcon />}
+                                    </button>
                                 </div>
                             )}
 
@@ -579,6 +600,12 @@ export default function VideoMeetComponent() {
                         <span className={styles.meetLive}><span className={styles.meetLiveDot}></span> Live</span>
                         {roomCode && <span className={styles.meetCode}>{decodeURIComponent(roomCode)}</span>}
                         <span className={styles.meetCount}><PeopleAltOutlinedIcon /> {videos.length + 1}</span>
+                        <Tooltip title={linkCopied ? "Link copied!" : "Copy meeting link"} arrow placement="bottom">
+                            <button type="button" className={`${styles.meetCopy} ${linkCopied ? styles.copied : ''}`} onClick={copyMeetingLink} aria-label="Copy meeting link">
+                                {linkCopied ? <CheckIcon /> : <ContentCopyIcon />}
+                                <span>{linkCopied ? "Copied" : "Copy link"}</span>
+                            </button>
+                        </Tooltip>
                     </div>
 
                     {/* ---------- chat panel ---------- */}

@@ -3,6 +3,7 @@ import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import "./authentication.css";
+import GuestJoinModal from "./GuestJoinModal";
 
 import VideocamIcon from '@mui/icons-material/Videocam';
 import MicIcon from '@mui/icons-material/Mic';
@@ -42,6 +43,7 @@ export default function Authentication() {
     const [open, setOpen] = React.useState(false);
     const [showPassword, setShowPassword] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [guestOpen, setGuestOpen] = React.useState(false);
 
     const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
@@ -261,13 +263,15 @@ export default function Authentication() {
 
                     <div className='au-divider'><span>or</span></div>
 
-                    <button type="button" className='au-guest' onClick={() => navigate("/aljk23")}>
+                    <button type="button" className='au-guest' onClick={() => setGuestOpen(true)}>
                         Continue as Guest
                     </button>
 
                     <p className='au-note'><CheckCircleIcon /> No credit card required</p>
                 </div>
             </main>
+
+            <GuestJoinModal open={guestOpen} onClose={() => setGuestOpen(false)} />
 
             <Snackbar
                 open={open}

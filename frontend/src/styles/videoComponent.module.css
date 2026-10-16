@@ -477,3 +477,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) { .meetLiveDot { animation: none; } }
+
+
+/* ---- copy meeting link buttons ---- */
+.meetCopy { display: inline-flex; align-items: center; gap: 6px; margin-left: 2px; padding: 5px 12px; font-family: inherit; font-size: 0.78rem; font-weight: 600; color: #fff; background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 999px; cursor: pointer; transition: background .2s; }
+.meetCopy:hover { background: rgba(255, 255, 255, 0.28); }
+.meetCopy svg { font-size: 16px; }
+.meetCopy.copied { background: rgba(16, 185, 129, 0.35); border-color: rgba(52, 211, 153, 0.6); }
+.copyBtn { flex: none; width: 34px; height: 34px; display: grid; place-items: center; color: #5a6486; background: #fff; border: 1px solid rgba(30, 41, 99, 0.15); border-radius: 9px; cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
+.copyBtn:hover { color: #6366f1; border-color: #6366f1; }
+.copyBtn svg { font-size: 18px; }
+.copyBtn.copied { color: #059669; border-color: rgba(16, 185, 129, 0.5); background: rgba(16, 185, 129, 0.1); }
+.lobbyCode strong { flex: 1; text-align: right; }
+@media (max-width: 576px) { .meetCopy span { display: none; } .meetCopy { padding: 5px 8px; } }

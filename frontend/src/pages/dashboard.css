@@ -113,6 +113,7 @@
 .db-link:hover svg { transform: translateX(3px); }
 
 /* ---------------- HOME ---------------- */
+.db-field-error { margin-top: 0.6rem; max-width: 520px; font-size: 0.85rem; color: #b91c1c; }
 .db-home { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; padding-top: 4rem; }
 .db-home-left h1 { margin-top: 1.2rem; }
 .db-join { display: flex; gap: 0.8rem; margin-top: 2rem; max-width: 520px; }

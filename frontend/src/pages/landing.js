@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import "../App.css"
 import "./landing.css"
 import { Link, useNavigate } from 'react-router-dom'
+import GuestJoinModal from './GuestJoinModal'
 
 import VideocamIcon from '@mui/icons-material/Videocam'
 import MicIcon from '@mui/icons-material/Mic'
@@ -68,6 +69,10 @@ export default function LandingPage() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
+    // "Join as Guest" popup (guest enters their own meeting code)
+    const [guestOpen, setGuestOpen] = useState(false);
+    const openGuest = () => { setMenuOpen(false); setGuestOpen(true); }
+
     // logged-in users see Dashboard / History / Logout instead of Login / Register
     const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
     const logout = () => {
@@ -126,7 +131,7 @@ export default function LandingPage() {
                             </>
                         ) : (
                             <>
-                                <button className='lp-link' onClick={() => go("/aljk23")}>Join as Guest</button>
+                                <button className='lp-link' onClick={() => openGuest()}>Join as Guest</button>
                                 <span className='lp-nav-sep'></span>
                                 <button className='lp-link' onClick={() => go("/auth")}>Register</button>
                                 <button className='lp-btn lp-btn-primary lp-btn-sm' onClick={() => go("/auth")}>Login</button>
@@ -157,7 +162,7 @@ export default function LandingPage() {
                             </>
                         ) : (
                             <>
-                                <button onClick={() => go("/aljk23")}>Join as Guest</button>
+                                <button onClick={() => openGuest()}>Join as Guest</button>
                                 <button onClick={() => go("/auth")}>Register</button>
                                 <button className='lp-mobile-login' onClick={() => go("/auth")}>Login</button>
                             </>
@@ -187,7 +192,7 @@ export default function LandingPage() {
                         <Link to={loggedIn ? "/home" : "/auth"} className='lp-btn lp-btn-primary lp-btn-lg'>
                             {loggedIn ? "Go to Dashboard" : "Get Started"} <ArrowForwardIcon />
                         </Link>
-                        <button className='lp-btn lp-btn-ghost lp-btn-lg' onClick={() => go("/aljk23")}>
+                        <button className='lp-btn lp-btn-ghost lp-btn-lg' onClick={() => openGuest()}>
                             Join as Guest
                         </button>
                     </div>
@@ -304,7 +309,7 @@ export default function LandingPage() {
                     <Link to={loggedIn ? "/home" : "/auth"} className='lp-btn lp-btn-white lp-btn-lg'>
                         {loggedIn ? "Go to Dashboard" : <>Get Started &mdash; it's free</>} <ArrowForwardIcon />
                     </Link>
-                    <button className='lp-btn lp-btn-outline lp-btn-lg' onClick={() => go("/aljk23")}>
+                    <button className='lp-btn lp-btn-outline lp-btn-lg' onClick={() => openGuest()}>
                         Join as Guest
                     </button>
                 </div>
@@ -320,7 +325,7 @@ export default function LandingPage() {
                     <div className='lp-footer-links'>
                         <button onClick={() => scrollTo("features")}>Features</button>
                         <button onClick={() => scrollTo("how")}>How it works</button>
-                        <button onClick={() => go("/aljk23")}>Join as Guest</button>
+                        <button onClick={() => openGuest()}>Join as Guest</button>
                         {loggedIn
                             ? <button onClick={() => go("/history")}>History</button>
                             : <button onClick={() => go("/auth")}>Login</button>}
@@ -328,6 +333,8 @@ export default function LandingPage() {
                     <span className='lp-copy'>&copy; {new Date().getFullYear()} EchoMeet. All rights reserved.</span>
                 </div>
             </footer>
+
+            <GuestJoinModal open={guestOpen} onClose={() => setGuestOpen(false)} />
         </div>
     )
 }
