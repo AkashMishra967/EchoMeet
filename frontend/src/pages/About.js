@@ -23,25 +23,21 @@ import DevicesIcon from '@mui/icons-material/Devices'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined'
 
-/* ==========================================================
-   EDIT YOUR DETAILS HERE – the whole page is built from this.
-   Leave a link as "" and its button is hidden automatically.
-   ========================================================== */
+
 const DEV = {
     name: "Akash Mishra",
     role: "Aspiring Full Stack Developer",
-    currently: "MCA student at AKTU, Lucknow",    // small line under your role ("" hides it)
-    location: "Lucknow, India",                    // "" hides it
-    photo: "profile.jpg",                          // put your photo in frontend/public/profile.jpg
-    status: "Creator of EchoMeet",                 // small green badge on the photo ("" hides it)
+    currently: "MCA student at AKTU, Lucknow",   
+    location: "Lucknow, India",                  
+    photo: "profile.jpeg",                        
+    status: "Creator of EchoMeet",                 
     intro: "MCA student with a strong foundation in data structures, algorithms and core CS fundamentals, building real-time full-stack web apps with React and Node.js.",
     bio: [
         "Hi, I'm Akash Mishra, an MCA student and aspiring full-stack developer. I completed my BCA from Kamla Nehru Institute of Physical and Social Sciences (KNIPSS), Sultanpur, and I am currently pursuing my MCA at Dr. A.P.J. Abdul Kalam Technical University (AKTU), Lucknow.",
-        "I have a solid base in computer science fundamentals and data structures & algorithms, and I write code in Java and Python. On the web side, I am growing across the full stack with React, Node.js, Express and MongoDB.",
+        "I have a solid base in computer science fundamentals and data structures & algorithms, and I write code in Java and Python. Alongside coding, I keep practising quantitative aptitude and logical reasoning to sharpen my problem-solving. On the web side, I am growing across the full stack with React, Node.js, Express and MongoDB.",
         "EchoMeet is my full-stack project: a real-time video meeting platform built with WebRTC and Socket.IO, complete with authentication, meeting history, screen sharing and live chat. My goal is to grow into a professional full-stack developer who builds reliable, user-friendly products.",
     ],
-    // ---- EDUCATION: add one block per degree / course (newest first). Empty list = section hidden.
-    // Fields: degree, school, years, grade (optional), details (optional)
+    
     education: [
         {
             degree: "Master of Computer Applications (MCA)",
@@ -63,6 +59,7 @@ const DEV = {
     skills: [
         { group: "Languages", items: ["Java", "Python", "JavaScript", "HTML5", "CSS3"] },
         { group: "CS Fundamentals", items: ["Data Structures & Algorithms", "OOP", "DBMS", "Operating Systems", "Computer Networks"] },
+        { group: "Aptitude & Reasoning", items: ["Quantitative Aptitude", "Logical Reasoning"] },
         { group: "Full Stack", items: ["React", "Node.js", "Express", "MongoDB", "REST APIs", "WebRTC", "Socket.IO"] },
         { group: "Tools", items: ["Git & GitHub", "VS Code", "Render"] },
     ],

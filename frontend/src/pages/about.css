@@ -123,6 +123,7 @@
 
 .ab-stack { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.1rem; }
 .ab-stack-group { padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+.ab-stack-group:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .ab-stack-group h4 { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.9rem; }
 .ab-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .ab-tags span { padding: 0.4rem 0.9rem; font-size: 0.9rem; font-weight: 600; color: #3730a3; background: color-mix(in srgb, var(--brand-1) 9%, #fff); border: 1px solid color-mix(in srgb, var(--brand-1) 25%, transparent); border-radius: 999px; }
