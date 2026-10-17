@@ -66,7 +66,8 @@
 .ab-hero h1 { margin-top: 1.2rem; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; }
 .ab-accent { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
 .ab-hero h2 { margin-top: 0.6rem; font-size: 1.35rem; font-weight: 600; color: var(--brand-1); }
-.ab-loc { margin-top: 0.7rem; display: inline-flex; align-items: center; gap: 0.3rem; color: var(--muted); font-size: 0.95rem; }
+.ab-meta { margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
+.ab-loc { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--muted); font-size: 0.95rem; }
 .ab-loc svg { font-size: 18px; }
 .ab-intro { margin-top: 1.2rem; max-width: 540px; font-size: 1.1rem; line-height: 1.7; color: var(--muted); }
 .ab-cta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.8rem; }
@@ -130,6 +131,22 @@
 .ab-learned li { display: flex; align-items: center; gap: 0.8rem; padding: 1rem 1.2rem; font-size: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
 .ab-learned svg { flex: none; font-size: 22px; color: var(--success); }
 
+/* ---------------- EDUCATION TIMELINE ---------------- */
+.ab-timeline { position: relative; max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2rem; }
+.ab-timeline::before { content: ""; position: absolute; left: 23px; top: 24px; bottom: 24px; width: 2px; background: linear-gradient(180deg, var(--brand-3), var(--brand-1), var(--brand-2)); opacity: .35; border-radius: 2px; }
+.ab-tl-item { position: relative; padding-left: 70px; }
+.ab-tl-dot { position: absolute; left: 0; top: 4px; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--grad); border: 4px solid var(--bg); box-shadow: 0 8px 20px color-mix(in srgb, var(--brand-1) 45%, transparent); }
+.ab-tl-dot svg { font-size: 22px; color: #fff; }
+.ab-tl-card { padding: 1.3rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s, border-color .25s; }
+.ab-tl-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: color-mix(in srgb, var(--brand-1) 40%, transparent); }
+.ab-tl-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; }
+.ab-tl-top h4 { font-size: 1.1rem; font-weight: 700; }
+.ab-tl-years { padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 600; color: #3730a3; background: color-mix(in srgb, var(--brand-1) 10%, #fff); border: 1px solid color-mix(in srgb, var(--brand-1) 28%, transparent); border-radius: 999px; white-space: nowrap; }
+.ab-tl-years.is-live { color: #047857; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.35); }
+.ab-tl-school { margin-top: 0.3rem; font-size: 0.98rem; font-weight: 500; color: var(--brand-1); }
+.ab-tl-grade { display: inline-block; margin-top: 0.7rem; padding: 0.25rem 0.7rem; font-size: 0.82rem; font-weight: 600; color: #047857; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; }
+.ab-tl-details { margin-top: 0.7rem; font-size: 0.93rem; line-height: 1.65; color: var(--muted); }
+
 /* ---------------- FINAL CTA ---------------- */
 .ab-final { max-width: 1100px; width: calc(100% - 3rem); margin: 5rem auto 4.5rem; padding: 3.4rem 1.5rem; text-align: center; color: #fff; border-radius: 28px; background: radial-gradient(500px 240px at 90% 0%, color-mix(in srgb, var(--brand-3) 38%, transparent), transparent 70%), var(--grad); box-shadow: 0 30px 80px color-mix(in srgb, var(--brand-1) 38%, transparent); }
 .ab-final-icon { font-size: 44px !important; opacity: .9; }
@@ -146,12 +163,18 @@
   .ab-hero-text { order: 2; }
   .ab-photo-wrap { order: 1; }
   .ab-intro { margin-inline: auto; }
+  .ab-meta { justify-content: center; }
   .ab-cta { justify-content: center; }
   .ab-stats { grid-template-columns: repeat(2, 1fr); gap: 0.6rem 0; }
   .ab-stat:nth-child(2) { border-right: none; }
   .ab-steps, .ab-stack { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
+  .ab-timeline::before { left: 19px; }
+  .ab-tl-item { padding-left: 58px; }
+  .ab-tl-dot { width: 40px; height: 40px; }
+  .ab-tl-dot svg { font-size: 19px; }
+  .ab-tl-card { padding: 1.1rem 1.2rem; }
   .ab-nav-inner { padding: 0 1rem; height: 62px; }
   .ab-logo-text { font-size: 1.15rem; }
   .ab-link span { display: none; }

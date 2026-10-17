@@ -21,6 +21,7 @@ import HistoryIcon from '@mui/icons-material/History'
 import TouchAppIcon from '@mui/icons-material/TouchApp'
 import DevicesIcon from '@mui/icons-material/Devices'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined'
 
 /* ==========================================================
    EDIT YOUR DETAILS HERE – the whole page is built from this.
@@ -28,27 +29,55 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
    ========================================================== */
 const DEV = {
     name: "Akash Mishra",
-    role: "Full Stack Developer",
-    location: "Lucknow",                                  
-    photo: "profile.jpeg",                          
-    status: "Creator of EchoMeet",                 
-    intro: "I build fast, real-time web applications and love turning ideas into products people actually use.",
+    role: "Aspiring Full Stack Developer",
+    currently: "MCA student at AKTU, Lucknow",    // small line under your role ("" hides it)
+    location: "Lucknow, India",                    // "" hides it
+    photo: "profile.jpg",                          // put your photo in frontend/public/profile.jpg
+    status: "Creator of EchoMeet",                 // small green badge on the photo ("" hides it)
+    intro: "MCA student with a strong foundation in data structures, algorithms and core CS fundamentals, building real-time full-stack web apps with React and Node.js.",
     bio: [
-        "Hi, I'm Akash Mishra, completed Bachelor of Computer Application (BCA) from Kamla Nehru Insitute of Physical and Social Science, Sultanpur(KNIPSS) and he also completed Master of Computer Application (MCA) from Dr. A.P.J Abdul Kalam Technical University Uttar Pardesh (AKTU),He is a Full-Stack Developer with knowledge of Data Structure and Algorithm, Java and Python.He also knowledge of logical resoning and quantitative aptitude  a developer who enjoys building complete products from the first line of code to the live deployment.",
-        "EchoMeet is a video meeting platform I designed and built from scratch. It started as a way to understand how real-time communication works, and grew into a full application with authentication, meeting history, screen sharing and live chat.",
+        "Hi, I'm Akash Mishra, an MCA student and aspiring full-stack developer. I completed my BCA from Kamla Nehru Institute of Physical and Social Sciences (KNIPSS), Sultanpur, and I am currently pursuing my MCA at Dr. A.P.J. Abdul Kalam Technical University (AKTU), Lucknow.",
+        "I have a solid base in computer science fundamentals and data structures & algorithms, and I write code in Java and Python. On the web side, I am growing across the full stack with React, Node.js, Express and MongoDB.",
+        "EchoMeet is my full-stack project: a real-time video meeting platform built with WebRTC and Socket.IO, complete with authentication, meeting history, screen sharing and live chat. My goal is to grow into a professional full-stack developer who builds reliable, user-friendly products.",
+    ],
+    // ---- EDUCATION: add one block per degree / course (newest first). Empty list = section hidden.
+    // Fields: degree, school, years, grade (optional), details (optional)
+    education: [
+        {
+            degree: "Master of Computer Applications (MCA)",
+            school: "Dr. A.P.J. Abdul Kalam Technical University (AKTU), Lucknow",
+            years: "Pursuing",
+            grade: "",
+            details: "Strengthening data structures & algorithms, core CS subjects and full-stack web development.",
+        },
+        {
+            degree: "Bachelor of Computer Applications (BCA)",
+            school: "Kamla Nehru Institute of Physical and Social Sciences, Sultanpur",
+            years: "Completed",
+            grade: "",
+            details: "Built a strong foundation in programming, databases and core computer science concepts.",
+        },
+    ],
+
+    // ---- SKILLS: groups of tags. Empty list = section hidden.
+    skills: [
+        { group: "Languages", items: ["Java", "Python", "JavaScript", "HTML5", "CSS3"] },
+        { group: "CS Fundamentals", items: ["Data Structures & Algorithms", "OOP", "DBMS", "Operating Systems", "Computer Networks"] },
+        { group: "Full Stack", items: ["React", "Node.js", "Express", "MongoDB", "REST APIs", "WebRTC", "Socket.IO"] },
+        { group: "Tools", items: ["Git & GitHub", "VS Code", "Render"] },
     ],
     github: "https://github.com/AkashMishra967",
     repo: "https://github.com/AkashMishra967/EchoMeet",
-    linkedin: "https://www.linkedin.com/in/akash-mishra-6ab000375/",                                  // e.g. "https://www.linkedin.com/in/your-name"
-    email: "akashmishra967033@gmail.com",                                     // e.g. "you@example.com"
-    resume: "https://drive.google.com/file/d/16fi9m9-ZP_9tQPbLYdtLHgz5R8vZrzO0/view?usp=drive_link",                                    // e.g. "/resume.pdf" (put the file in frontend/public)
+    linkedin: "https://www.linkedin.com/in/akash-mishra-6ab000375/",                                  
+    email: "akashmishra967033@gmail.com",                                     
+    resume: "https://drive.google.com/file/d/16fi9m9-ZP_9tQPbLYdtLHgz5R8vZrzO0/view?usp=drive_link",                                    
 }
 
 const STATS = [
-    { value: "Real-time", label: "WebRTC + Socket.IO" },
-    { value: "Multi-user", label: "Rooms with many people" },
-    { value: "Full stack", label: "Frontend to deployment" },
-    { value: "Responsive", label: "Mobile & desktop" },
+    { value: "MCA", label: "Pursuing at AKTU" },
+    { value: "BCA", label: "Completed" },
+    { value: "DSA", label: "Java & Python" },
+    { value: "Full stack", label: "React · Node · MongoDB" },
 ]
 
 const FEATURES = [
@@ -119,7 +148,12 @@ export default function About() {
 
                     <h1>Hi, I'm <span className='ab-accent'>{DEV.name}</span></h1>
                     <h2>{DEV.role}</h2>
-                    {DEV.location && <p className='ab-loc'><PlaceOutlinedIcon /> {DEV.location}</p>}
+                    {(DEV.currently || DEV.location) && (
+                        <div className='ab-meta'>
+                            {DEV.currently && <p className='ab-loc'><SchoolOutlinedIcon /> {DEV.currently}</p>}
+                            {DEV.location && <p className='ab-loc'><PlaceOutlinedIcon /> {DEV.location}</p>}
+                        </div>
+                    )}
 
                     <p className='ab-intro'>{DEV.intro}</p>
 
@@ -185,6 +219,53 @@ export default function About() {
                     {DEV.bio.map((p, i) => <p key={i}>{p}</p>)}
                 </div>
             </section>
+
+            {/* ---------------- EDUCATION ---------------- */}
+            {DEV.education.length > 0 && (
+                <section className='ab-section'>
+                    <div className='ab-section-head'>
+                        <span className='ab-eyebrow'>Education</span>
+                        <h3>Academic background</h3>
+                    </div>
+
+                    <div className='ab-timeline'>
+                        {DEV.education.map((e, i) => (
+                            <div className='ab-tl-item' key={i}>
+                                <span className='ab-tl-dot'><SchoolOutlinedIcon /></span>
+                                <div className='ab-tl-card'>
+                                    <div className='ab-tl-top'>
+                                        <h4>{e.degree}</h4>
+                                        {e.years && <span className={`ab-tl-years ${e.years.toLowerCase() === 'pursuing' ? 'is-live' : ''}`}>{e.years}</span>}
+                                    </div>
+                                    <p className='ab-tl-school'>{e.school}</p>
+                                    {e.grade && <span className='ab-tl-grade'>{e.grade}</span>}
+                                    {e.details && <p className='ab-tl-details'>{e.details}</p>}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {/* ---------------- SKILLS ---------------- */}
+            {DEV.skills.length > 0 && (
+                <section className='ab-section'>
+                    <div className='ab-section-head'>
+                        <span className='ab-eyebrow'>Skills</span>
+                        <h3>What I work with</h3>
+                    </div>
+                    <div className='ab-stack'>
+                        {DEV.skills.map((g) => (
+                            <div className='ab-stack-group' key={g.group}>
+                                <h4>{g.group}</h4>
+                                <div className='ab-tags'>
+                                    {g.items.map((t) => <span key={t}>{t}</span>)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {/* ---------------- ABOUT PROJECT ---------------- */}
             <section className='ab-section'>
