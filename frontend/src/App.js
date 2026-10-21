@@ -13,8 +13,6 @@ import server from './environment';
 
 function App() {
 
-  // wake the (free) backend in the background as soon as the site opens,
-  // so it is usually ready by the time the user logs in
   useEffect(() => {
     fetch(`${server}/health`, { mode: 'no-cors' }).catch(() => {});
   }, []);
