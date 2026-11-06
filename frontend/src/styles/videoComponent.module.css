@@ -499,6 +499,7 @@
 .localFocused .localVideoEl { object-fit: contain; }
 
 .localOff {
+  container-type: size;
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
   background:
@@ -507,9 +508,9 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 .phAvatar {
-  width: clamp(36px, 38%, 120px); aspect-ratio: 1;
+  height: clamp(36px, 46%, 110px); aspect-ratio: 1;
   display: grid; place-items: center;
-  font-size: clamp(16px, 5vmin, 44px); font-weight: 800; color: #fff;
+  font-size: clamp(16px, 5vmin, 44px); font-size: clamp(14px, 19cqh, 52px); font-weight: 800; color: #fff;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   border-radius: 50%;
   box-shadow: 0 8px 22px rgba(99, 102, 241, 0.5);
@@ -522,3 +523,24 @@
 @media (max-width: 576px) {
   .localTile { width: 45vw; height: auto; aspect-ratio: 7 / 8; max-height: 25vh; }
 }
+
+
+/* ==========================================================
+   REMOTE TILE – avatar when the other person's camera is off
+   ========================================================== */
+.tileDefault { position: relative; }
+.tileDefault video { display: block; }
+
+.remoteOff { z-index: 2; }
+.tileDefault .remoteOff { border-radius: 10px; }
+.tileFocused .remoteOff { border-radius: 0; }
+.tileThumb .remoteOff { border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.45); box-sizing: border-box; }
+
+.phName { max-width: 88%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.95rem; font-weight: 700; color: #fff; }
+.phAvatar svg { font-size: 55%; }
+.tileThumb .phName, .tileThumb .phLabel { display: none; }
+.tileFocused .phName { font-size: 1.25rem; }
+.tileFocused .phLabel { font-size: 0.95rem; }
+
+/* bigger avatar when a camera-off tile is shown full screen */
+.localFocused .phAvatar, .tileFocused .phAvatar { height: clamp(90px, 24%, 170px); }

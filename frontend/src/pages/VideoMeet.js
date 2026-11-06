@@ -89,6 +89,21 @@ export default function VideoMeetComponent() {
 
     let [videos, setVideos] = useState([])
 
+    // What every other participant tells us about themselves: { [socketId]: { name, cam } }
+    const [peerMeta, setPeerMeta] = useState({})
+    // What we tell others about ourselves (kept in a ref so socket callbacks always see the latest)
+    const metaRef = useRef({ name: "", cam: true })
+
+    // send our name + camera on/off to one peer (or to everybody) through the existing "signal" channel
+    const sendMeta = (toId) => {
+        if (!socketRef.current || !socketIdRef.current) return;
+        const message = JSON.stringify({ meta: metaRef.current });
+        const targets = toId ? [toId] : Object.keys(connections);
+        targets.forEach((id) => {
+            if (id !== socketIdRef.current) socketRef.current.emit('signal', id, message);
+        });
+    }
+
     // Which tile is shown full screen: null (normal grid) | 'local' | remote socketId
     let [focusedId, setFocusedId] = useState(null)
 
@@ -101,7 +116,7 @@ export default function VideoMeetComponent() {
     const thumbIds = ['local', ...videos.map(v => v.socketId)].filter(id => id !== activeFocus)
 
     const getTileClass = (id) => {
-        if (activeFocus === null) return ''
+        if (activeFocus === null) return styles.tileDefault
         return activeFocus === id ? styles.tileFocused : styles.tileThumb
     }
     const getLocalClass = () => {
@@ -114,6 +129,13 @@ export default function VideoMeetComponent() {
 
 
     // }
+
+    // tell everyone in the room when our camera is switched on/off (so they can show an avatar)
+    useEffect(() => {
+        metaRef.current = { name: (username || "").trim() || "Guest", cam: video === true };
+        sendMeta();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [video, username])
 
     // ask for camera / mic permission ONCE when the page opens
     // (it used to run after every render, which re-opened the camera and
@@ -321,6 +343,10 @@ export default function VideoMeetComponent() {
                 }).catch(e => console.log(e))
             }
 
+            if (signal.meta) {
+                setPeerMeta((prev) => ({ ...prev, [fromId]: signal.meta }))
+            }
+
             if (signal.ice) {
                 connections[fromId].addIceCandidate(new RTCIceCandidate(signal.ice)).catch(e => console.log(e))
             }
@@ -343,6 +369,7 @@ export default function VideoMeetComponent() {
 
             socketRef.current.on('user-left', (id) => {
                 setVideos((videos) => videos.filter((video) => video.socketId !== id))
+                setPeerMeta((prev) => { const next = { ...prev }; delete next[id]; return next; })
             })
 
             socketRef.current.on('user-joined', (id, clients) => {
@@ -402,6 +429,9 @@ export default function VideoMeetComponent() {
                         connections[socketListId].addStream(window.localStream)
                     }
                 })
+
+                // introduce ourselves (name + camera state) to everyone in the room
+                sendMeta()
 
                 if (id === socketIdRef.current) {
                     for (let id2 in connections) {
@@ -754,27 +784,43 @@ export default function VideoMeetComponent() {
                     </div>
 
                     <div className={styles.conferenceView}>
-                        {videos.map((video) => (
-                            <div
-                                key={video.socketId}
-                                className={getTileClass(video.socketId)}
-                                style={{ '--i': Math.max(thumbIds.indexOf(video.socketId), 0), cursor: 'pointer' }}
-                                onClick={() => toggleFocus(video.socketId)}
-                            >
-                                <video
-
-                                    data-socket={video.socketId}
-                                    ref={ref => {
-                                        if (ref && video.stream) {
-                                            ref.srcObject = video.stream;
-                                        }
-                                    }}
-                                    autoPlay
+                        {videos.map((video) => {
+                            const meta = peerMeta[video.socketId];
+                            // trust what they told us; if we have not heard yet, look at the stream itself
+                            const hasLiveVideo = !!video.stream && video.stream.getVideoTracks().some(t => t.readyState === 'live');
+                            const camOff = meta ? meta.cam === false : !hasLiveVideo;
+                            const peerName = meta && meta.name ? meta.name : "";
+                            return (
+                                <div
+                                    key={video.socketId}
+                                    className={getTileClass(video.socketId)}
+                                    style={{ '--i': Math.max(thumbIds.indexOf(video.socketId), 0), cursor: 'pointer' }}
+                                    onClick={() => toggleFocus(video.socketId)}
                                 >
-                                </video>
-                            </div>
+                                    <video
+                                        data-socket={video.socketId}
+                                        ref={ref => {
+                                            if (ref && video.stream) {
+                                                ref.srcObject = video.stream;
+                                            }
+                                        }}
+                                        autoPlay
+                                        playsInline
+                                    >
+                                    </video>
 
-                        ))}
+                                    {camOff && (
+                                        <div className={`${styles.localOff} ${styles.remoteOff}`}>
+                                            <span className={styles.phAvatar}>
+                                                {peerName ? peerName.trim().charAt(0).toUpperCase() : <PersonOutlineIcon />}
+                                            </span>
+                                            {peerName && <span className={styles.phName}>{peerName}</span>}
+                                            <span className={styles.phLabel}><VideocamOffIcon /> Camera off</span>
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                        })}
 
                     </div>
 
