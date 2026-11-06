@@ -67,7 +67,7 @@ const DEV = {
     repo: "https://github.com/AkashMishra967/EchoMeet",
     linkedin: "https://www.linkedin.com/in/akash-mishra-6ab000375/",                                  
     email: "akashmishra967033@gmail.com",                                     
-    resume: "https://drive.google.com/file/d/16fi9m9-ZP_9tQPbLYdtLHgz5R8vZrzO0/view?usp=drive_link",                                    
+    resume: "https://drive.google.com/file/d/10QxzgBFXnXrjt-rKUKF_E_nVyGjjy42c/view?usp=drive_link",                                    
 }
 
 const STATS = [

@@ -115,11 +115,13 @@ export default function VideoMeetComponent() {
 
     // }
 
+    // ask for camera / mic permission ONCE when the page opens
+    // (it used to run after every render, which re-opened the camera and
+    //  put the video back on screen right after turning the camera off)
     useEffect(() => {
-        console.log("HELLO")
         getPermissions();
-
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     let getDislayMedia = () => {
         if (screen) {
@@ -133,42 +135,46 @@ export default function VideoMeetComponent() {
     }
 
     const getPermissions = async () => {
+        let hasVideo = false;
+        let hasAudio = false;
+
+        // screen sharing is only supported on desktop browsers
+        setScreenAvailable(!!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia));
+
+        // probe camera permission (stop the probe stream right away)
         try {
-            const videoPermission = await navigator.mediaDevices.getUserMedia({ video: true });
-            if (videoPermission) {
-                setVideoAvailable(true);
-                console.log('Video permission granted');
-            } else {
-                setVideoAvailable(false);
-                console.log('Video permission denied');
-            }
-
-            const audioPermission = await navigator.mediaDevices.getUserMedia({ audio: true });
-            if (audioPermission) {
-                setAudioAvailable(true);
-                console.log('Audio permission granted');
-            } else {
-                setAudioAvailable(false);
-                console.log('Audio permission denied');
-            }
-
-            if (navigator.mediaDevices.getDisplayMedia) {
-                setScreenAvailable(true);
-            } else {
-                setScreenAvailable(false);
-            }
-
-            if (videoAvailable || audioAvailable) {
-                const userMediaStream = await navigator.mediaDevices.getUserMedia({ video: videoAvailable, audio: audioAvailable });
-                if (userMediaStream) {
-                    window.localStream = userMediaStream;
-                    if (localVideoref.current) {
-                        localVideoref.current.srcObject = userMediaStream;
-                    }
-                }
-            }
+            const probe = await navigator.mediaDevices.getUserMedia({ video: true });
+            probe.getTracks().forEach(track => track.stop());
+            hasVideo = true;
+            console.log('Video permission granted');
         } catch (error) {
-            console.log(error);
+            console.log('Video permission denied');
+        }
+
+        // probe microphone permission
+        try {
+            const probe = await navigator.mediaDevices.getUserMedia({ audio: true });
+            probe.getTracks().forEach(track => track.stop());
+            hasAudio = true;
+            console.log('Audio permission granted');
+        } catch (error) {
+            console.log('Audio permission denied');
+        }
+
+        setVideoAvailable(hasVideo);
+        setAudioAvailable(hasAudio);
+
+        // open the real stream (used for the lobby preview and as the first stream in the call)
+        if (hasVideo || hasAudio) {
+            try {
+                const userMediaStream = await navigator.mediaDevices.getUserMedia({ video: hasVideo, audio: hasAudio });
+                window.localStream = userMediaStream;
+                if (localVideoref.current) {
+                    localVideoref.current.srcObject = userMediaStream;
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
@@ -723,15 +729,29 @@ export default function VideoMeetComponent() {
                     </div>
 
 
-                    <video
-                        className={getLocalClass()}
+                    {/* own tile: the <video> stays mounted (stream attached) and an avatar covers it while the camera is off */}
+                    <div
+                        className={`${getLocalClass()} ${styles.localTile}`}
                         style={{ '--i': Math.max(thumbIds.indexOf('local'), 0), cursor: 'pointer' }}
                         onClick={() => toggleFocus('local')}
-                        ref={localVideoref}
-                        autoPlay
-                        muted
-                        playsInline
-                    ></video>
+                    >
+                        <video
+                            className={styles.localVideoEl}
+                            ref={localVideoref}
+                            autoPlay
+                            muted
+                            playsInline
+                        ></video>
+
+                        {video === false && (
+                            <div className={styles.localOff}>
+                                <span className={styles.phAvatar}>
+                                    {((username || "You").trim().charAt(0) || "Y").toUpperCase()}
+                                </span>
+                                <span className={styles.phLabel}><VideocamOffIcon /> Camera off</span>
+                            </div>
+                        )}
+                    </div>
 
                     <div className={styles.conferenceView}>
                         {videos.map((video) => (

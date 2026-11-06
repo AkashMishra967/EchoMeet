@@ -490,3 +490,35 @@
 .copyBtn.copied { color: #059669; border-color: rgba(16, 185, 129, 0.5); background: rgba(16, 185, 129, 0.1); }
 .lobbyCode strong { flex: 1; text-align: right; }
 @media (max-width: 576px) { .meetCopy span { display: none; } .meetCopy { padding: 5px 8px; } }
+
+/* ==========================================================
+   OWN TILE – video + "camera off" avatar (stable size)
+   ========================================================== */
+.localTile { overflow: hidden; background: #000; width: calc(20vh * 4 / 3); }
+.localVideoEl { display: block; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.localFocused .localVideoEl { object-fit: contain; }
+
+.localOff {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  background:
+    radial-gradient(circle at 30% 22%, rgba(14, 165, 233, 0.28), transparent 55%),
+    linear-gradient(135deg, #1b2266, #0b1142);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.phAvatar {
+  width: clamp(36px, 38%, 120px); aspect-ratio: 1;
+  display: grid; place-items: center;
+  font-size: clamp(16px, 5vmin, 44px); font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 50%;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.5);
+}
+.phLabel { display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; font-weight: 600; color: rgba(255, 255, 255, 0.85); }
+.phLabel svg { font-size: 15px; }
+.localThumb .phLabel { display: none; }
+.localFocused .phLabel { font-size: 0.95rem; }
+
+@media (max-width: 576px) {
+  .localTile { width: 45vw; height: auto; aspect-ratio: 7 / 8; max-height: 25vh; }
+}
