@@ -43,6 +43,15 @@ export default function VideoMeetComponent() {
     const { url: roomCode } = useParams();
     const chatEndRef = useRef(null);
 
+    // small message above the control bar (used when a feature is not available on this device)
+    const [notice, setNotice] = useState("");
+    const noticeTimer = useRef(null);
+    const showNotice = (text) => {
+        setNotice(text);
+        clearTimeout(noticeTimer.current);
+        noticeTimer.current = setTimeout(() => setNotice(""), 4000);
+    }
+
     // copy the meeting link to share it
     const [linkCopied, setLinkCopied] = useState(false);
     const copyMeetingLink = async () => {
@@ -694,6 +703,8 @@ export default function VideoMeetComponent() {
                     </div> : <></>}
 
 
+                    {notice && <div className={styles.toast} role="status" aria-live="polite">{notice}</div>}
+
                     {/* ---------- call controls ---------- */}
                     <div className={styles.buttonContainers}>
 
@@ -726,7 +737,19 @@ export default function VideoMeetComponent() {
                                 >
                                     {screen === true ? <StopScreenShareIcon /> : <ScreenShareIcon />}
                                 </IconButton>
-                            </Tooltip> : <></>}
+                            </Tooltip>
+                            :
+                            // this browser (e.g. phones) cannot share the screen: keep the icon but dim it and explain on tap
+                            <Tooltip title="Not supported on this device" arrow placement="top">
+                                <IconButton
+                                    onClick={() => showNotice("Screen sharing isn't supported on mobile browsers. Open EchoMeet on a laptop or desktop to share your screen.")}
+                                    className={`${styles.ctrlBtn} ${styles.ctrlDisabled}`}
+                                    aria-label="Share screen (not supported on this device)"
+                                    aria-disabled="true"
+                                >
+                                    <ScreenShareIcon />
+                                </IconButton>
+                            </Tooltip>}
 
                         <Badge
                             badgeContent={showModal ? 0 : newMessages}
